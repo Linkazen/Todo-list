@@ -7,7 +7,24 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <button id="todobtn">Create New todo</button>
+    <form id="todoform">
+        <label for="title">Enter The Name</label>
+        <input type="text" name="title">
+
+        <label for="desc">task specifications</label>
+        <input type="text" name="desc">
+
+        <p>when does the to-do need finishing?</p>
+        <input type="radio" name="nodate" checked>
+        <label for="nodate">Whenever</label>
+        <input type="radio" name="enterdate">
+        <label for="enterdate">Specific date</label>
+        <input type="datetime-local">
+
+        <label for="important"></label>
+        <input type="checkbox" name="important">
+    </form>
 
     <script src="main.js"></script>
 </body>
