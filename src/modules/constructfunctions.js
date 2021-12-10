@@ -4,6 +4,11 @@ function todoConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority}
 }
 
+function projectConstructor(title, desc, datedue) {
+    let todos = []
+    return {title, desc, datedue, todos}
+}
+
 // Function that returns the form for the user to fill out to make a todo
 function createTodoForm() {
     let formshell = document.createElement("form")
@@ -82,13 +87,6 @@ function addFormBtnListeners(form) {
     form[7].addEventListener("click", makeTodo)
 }
 
-function appendForm() {
-    let mainarea = document.querySelector("#content")
-    let form = createTodoForm()
-    addFormBtnListeners(form)
-    mainarea.appendChild(form)
-}
-
 function destroyForm(e) {
     e.srcElement.parentNode.remove()
 }
@@ -96,7 +94,13 @@ function destroyForm(e) {
 function makeTodo() {
     let form = document.querySelector("#todoform")
     todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-    console.log(todos)
+}
+
+function appendForm() {
+    let mainarea = document.querySelector("#content")
+    let form = createTodoForm()
+    addFormBtnListeners(form)
+    mainarea.appendChild(form)
 }
 
 export { appendForm }
