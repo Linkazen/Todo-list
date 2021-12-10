@@ -75,15 +75,22 @@ function createTodoForm() {
     return formshell
 }
 
-function addFormBtnListeners() {
-    let confbtn = document.querySelector("#")
+function addFormBtnListeners(form) {
+    form[6].addEventListener("click", e => {
+        destroyForm(e)
+    })
+    form[7].addEventListener("click", makeTodo)
 }
 
 function appendForm() {
     let mainarea = document.querySelector("#content")
     let form = createTodoForm()
-    form[7].addEventListener("click", makeTodo)
+    addFormBtnListeners(form)
     mainarea.appendChild(form)
+}
+
+function destroyForm(e) {
+    e.srcElement.parentNode.remove()
 }
 
 function makeTodo() {
