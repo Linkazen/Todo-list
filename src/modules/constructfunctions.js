@@ -4,6 +4,7 @@ function todoConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority}
 }
 
+// Function that returns the form for the user to fill out to make a todo
 function createTodoForm() {
     let formshell = document.createElement("form")
 
@@ -22,55 +23,60 @@ function createTodoForm() {
         "radio",
         "radio",
         "datetime-local",
-        "checkbox"
+        "checkbox",
+        "button",
+        "button"
     ]
 
-    let textstuff = [
+    let textlabels = [
         "Enter The Name", 
-        "task specifications", 
+        "Task Specifications", 
         "Whenever", 
         "Specific date", 
         "Pick a date and time",
-        "Important?"
+        "Important?",
+        "Close",
+        "Create"
     ]
 
-    let inputs = []
-    let labels = []
+    // For loop to place the information onto the elements and append them
+    for(let i = 0; i < types.length; i++) {
+        if(i < 6) {
+            let tempinput = document.createElement("input")
+            let templabel = document.createElement("label")
+            tempinput.name = names[i]
+            templabel.for = names[i]
+            templabel.textContent = textlabels[i]
+            tempinput.type = types[i]
+            
+            if(i == 2) {
+                let paragraph = document.createElement("p")
+                paragraph.textContent = "when does the to-do need finishing?"
+                formshell.appendChild(paragraph)
+            }
 
-    for(let i = 0; i < names.length; i++) {
-        let tempinputdiv = document.createElement("input")
-        let templabeldiv = document.createElement("label")
-        tempinputdiv.name = names[i]
-        templabeldiv.for = names[i]
-        inputs.push(tempinputdiv)
-        labels.push(templabeldiv)
+            if(i < 2 || i > 3) {
+                formshell.appendChild(templabel)
+                formshell.appendChild(tempinput)
+            } else {
+                formshell.appendChild(tempinput)
+                formshell.appendChild(templabel)
+            }
+            
+        } else {
+            let tempbutton = document.createElement("button")
+            tempbutton.type = types[i]
+            tempbutton.textContent = textlabels[i]
+            formshell.appendChild(tempbutton)
+        }
     }
 
-    for(let i = 0; i < names.length; i++) {
-        let label = labels[i]
-        let input = inputs[i]
-        let paragraph = document.createElement("p")
-        label.textContent = textstuff[i]
-        input.type = types[i]
-        paragraph.textContent = "when does the to-do need finishing?"
-        
-        if(i == 2) {
-            formshell.appendChild(paragraph)
-        }
-
-        if(i < 2 || i > 3) {
-            formshell.appendChild(input)
-            formshell.appendChild(label)
-        }
-        formshell.appendChild(label)
-        formshell.appendChild(input)
-    }
     return formshell
 }
 
-function test() {
+function appendForm() {
     let mainarea = document.querySelector("#content")
     mainarea.appendChild(createTodoForm())
 }
 
-export { test }
+export { appendForm }

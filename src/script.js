@@ -1,5 +1,5 @@
-import { test } from "./modules/constructfunctions";
+import { appendForm } from "./modules/constructfunctions";
 
 let todobtn = document.querySelector("#todobtn")
 
-todobtn.addEventListener("click", test)
+todobtn.addEventListener("click", appendForm)
