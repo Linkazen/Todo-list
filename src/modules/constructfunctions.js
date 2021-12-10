@@ -7,6 +7,7 @@ function todoConstructor(title, desc, datedue, priority) {
 // Function that returns the form for the user to fill out to make a todo
 function createTodoForm() {
     let formshell = document.createElement("form")
+    formshell.id = "todoform"
 
     let names = [
         "title", 
@@ -74,9 +75,21 @@ function createTodoForm() {
     return formshell
 }
 
+function addFormBtnListeners() {
+    let confbtn = document.querySelector("#")
+}
+
 function appendForm() {
     let mainarea = document.querySelector("#content")
-    mainarea.appendChild(createTodoForm())
+    let form = createTodoForm()
+    form[7].addEventListener("click", makeTodo)
+    mainarea.appendChild(form)
+}
+
+function makeTodo() {
+    let form = document.querySelector("#todoform")
+    todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+    console.log(todos)
 }
 
 export { appendForm }
