@@ -3,7 +3,8 @@ let projects = [
     projectConstructor("Today", "To-Dos that are due today.", undefined, undefined),
     projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined),
     projectConstructor("30 Days", "To-Dos that are due in 30 days.", undefined, undefined),
-    projectConstructor("Later", "To-Dos that are due after 30 days.", undefined, undefined)
+    projectConstructor("Later", "To-Dos that are due after 30 days.", undefined, undefined),
+    projectConstructor("funnyman dice", "make some funnymen dice.", new Date(), true)
 ]
 
 function todoConstructor(title, desc, datedue, priority) {
@@ -53,7 +54,7 @@ const formfuncs = (() => {
             "Create"
         ]
 
-        if (projectstatus == true) {
+        if (projectstatus) {
             textlabels[1] = "Project Description"
         }
 
@@ -96,6 +97,21 @@ const formfuncs = (() => {
         return formshell
     }
 
+    function destroyForm(e) {
+        e.srcElement.parentNode.remove()
+    }
+    
+    function makeTodo(projectstatus) {
+        let form = document.querySelector("#todoform")
+        if(projectstatus == true) {
+            projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+        } else if (projectstatus == false) {
+            todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+        } else {
+            projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+        }
+    }
+    
     function addFormBtnListeners(form, projectstatus) {
         form[6].addEventListener("click", e => {
             destroyForm(e)
@@ -106,20 +122,7 @@ const formfuncs = (() => {
             destroyForm(e)
         })
     }
-    
-    function destroyForm(e) {
-        e.srcElement.parentNode.remove()
-    }
-    
-    function makeTodo(projectstatus) {
-        let form = document.querySelector("#todoform")
-        if(projectstatus) {
-            projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-        } else {
-            todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-        }
-    }
-    
+
     // checks if there is already a form there and removes it if so
     function checkForm() {
         let form = document.querySelector("#todoform")
@@ -148,7 +151,10 @@ const projectfuncs = (() => {
         let projecttodosarea = document.querySelector("#projecttodos")
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "minecrafttexturepaks"
-        addtodobtn.addEventListener("click", formfuncs.appendForm)
+        addtodobtn.addEventListener("click", () => {
+            formfuncs.appendForm(index)
+            console.log(projects[index].todos)
+        })
         projecttodosarea.appendChild(addtodobtn)
         projecttodosarea.appendChild(compileArray(todos))
 
