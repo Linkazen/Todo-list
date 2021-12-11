@@ -1,16 +1,21 @@
 let todos = []
+let projects = []
 
 function todoConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority}
 }
 
-function projectConstructor(title, desc, datedue) {
+function projectConstructor(title, desc, datedue, priority) {
     let todos = []
-    return {title, desc, datedue, todos}
+    return {title, desc, datedue, priority, todos}
+}
+
+function createProjectForm() {
+    
 }
 
 // Function that returns the form for the user to fill out to make a todo
-function createTodoForm() {
+function createForm(projectstatus) {
     let formshell = document.createElement("form")
     formshell.id = "todoform"
 
@@ -36,7 +41,7 @@ function createTodoForm() {
 
     let textlabels = [
         "Enter The Name", 
-        "Task Specifications", 
+        "To-Do Description", 
         "Whenever", 
         "Specific date", 
         "Pick a date and time",
@@ -45,9 +50,13 @@ function createTodoForm() {
         "Create"
     ]
 
+    if (projectstatus == true) {
+        textlabels[1] = "Project Description"
+    }
+
     // For loop to place the information onto the elements and append them
     for(let i = 0; i < types.length; i++) {
-        if(i < 6) {
+        if(i < (types.length - 2)) {
             let tempinput = document.createElement("input")
             let templabel = document.createElement("label")
             tempinput.name = names[i]
@@ -80,26 +89,34 @@ function createTodoForm() {
     return formshell
 }
 
-function addFormBtnListeners(form) {
+function addFormBtnListeners(form, projectstatus) {
     form[6].addEventListener("click", e => {
         destroyForm(e)
     })
-    form[7].addEventListener("click", makeTodo)
+    form[7].addEventListener("click", () => {
+        makeTodo(projectstatus)
+    })
 }
 
 function destroyForm(e) {
     e.srcElement.parentNode.remove()
 }
 
-function makeTodo() {
+function makeTodo(projectstatus) {
     let form = document.querySelector("#todoform")
-    todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+    if(projectstatus) {
+        projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+        console.log(projects)
+    } else {
+        todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+        console.log(todos)
+    }
 }
 
-function appendForm() {
+function appendForm(projectstatus) {
     let mainarea = document.querySelector("#content")
-    let form = createTodoForm()
-    addFormBtnListeners(form)
+    let form = createForm(projectstatus)
+    addFormBtnListeners(form, projectstatus)
     mainarea.appendChild(form)
 }
 
