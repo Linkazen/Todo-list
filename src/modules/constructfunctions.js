@@ -1,5 +1,9 @@
 let todos = []
-let projects = []
+let projects = [
+    projectConstructor("Today", "To-Dos that are due today.", undefined, undefined),
+    projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined),
+    projectConstructor("30 Days", "To-Dos that are due in 30 days.", undefined, undefined)
+]
 
 function todoConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority}
@@ -10,8 +14,23 @@ function projectConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority, todos}
 }
 
-function createProjectForm() {
+// compiles the projects together into a div
+function showProjects() {
+    let projectsDiv = document.createElement("div")
     
+    for (let i = 0; i < projects.length; i++) {
+        let project = document.createElement("div")
+        project.textContent = projects[i].title
+        projectsDiv.appendChild(project)
+    }
+
+    return projectsDiv
+}
+
+function appendProjects() {
+    let projectsarea = document.querySelector("#projectsarea")
+    projectsarea.innerHTML = ""
+    projectsarea.appendChild(showProjects())
 }
 
 // Function that returns the form for the user to fill out to make a todo
@@ -133,4 +152,4 @@ function appendForm(projectstatus) {
     mainarea.appendChild(form)
 }
 
-export { appendForm }
+export { appendForm, appendProjects }
