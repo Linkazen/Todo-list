@@ -10,4 +10,3 @@ todobtn.addEventListener("click", () => {
 probtn.addEventListener("click", () => {
     appendForm(true)
 })
-projectbtn.addEventListener("click", appendProjects)
