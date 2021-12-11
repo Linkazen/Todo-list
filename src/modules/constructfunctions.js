@@ -100,9 +100,10 @@ const formfuncs = (() => {
         form[6].addEventListener("click", e => {
             destroyForm(e)
         })
-        form[7].addEventListener("click", () => {
+        form[7].addEventListener("click", e => {
             makeTodo(projectstatus)
             projectfuncs.appendProjects()
+            destroyForm(e)
         })
     }
     
@@ -144,7 +145,13 @@ const projectfuncs = (() => {
     function makeProjectSpace(e) {
         let index = e.srcElement.number
         let todos = projects[index].todos
-        document.querySelector("#projecttodos").appendChild(compileArray(todos))
+        let projecttodosarea = document.querySelector("#projecttodos")
+        let addtodobtn = document.createElement("button")
+        addtodobtn.textContent = "minecrafttexturepaks"
+        addtodobtn.addEventListener("click", formfuncs.appendForm)
+        projecttodosarea.appendChild(addtodobtn)
+        projecttodosarea.appendChild(compileArray(todos))
+
     }
     
     // compiles all elements in an array into a div
