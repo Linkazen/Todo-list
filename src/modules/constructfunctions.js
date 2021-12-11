@@ -66,7 +66,11 @@ function createForm(projectstatus) {
             
             if(i == 2) {
                 let paragraph = document.createElement("p")
-                paragraph.textContent = "when does the to-do need finishing?"
+                if(projectstatus) {
+                    paragraph.textContent = "when does the project need finishing?"
+                } else {
+                    paragraph.textContent = "when does the to-do need finishing?"
+                }
                 formshell.appendChild(paragraph)
             }
 
@@ -106,16 +110,25 @@ function makeTodo(projectstatus) {
     let form = document.querySelector("#todoform")
     if(projectstatus) {
         projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-        console.log(projects)
     } else {
         todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-        console.log(todos)
+    }
+}
+
+// checks if there is already a form there and removes it if so
+function checkForm() {
+    let form = document.querySelector("#todoform")
+    if (form == undefined) {
+        return
+    } else {
+        form.remove()
     }
 }
 
 function appendForm(projectstatus) {
     let mainarea = document.querySelector("#content")
     let form = createForm(projectstatus)
+    checkForm()
     addFormBtnListeners(form, projectstatus)
     mainarea.appendChild(form)
 }
