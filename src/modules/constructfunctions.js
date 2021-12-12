@@ -26,8 +26,8 @@ const formfuncs = (() => {
         let names = [
             "title", 
             "desc", 
-            "nodate", 
-            "enterdate", 
+            "date", 
+            "date", 
             "picktime", 
             "important"
         ]
@@ -75,15 +75,29 @@ const formfuncs = (() => {
                     } else {
                         paragraph.textContent = "when does the to-do need finishing?"
                     }
+                    tempinput.checked = true
                     formshell.appendChild(paragraph)
                 }
 
-                if(i < 2 || i > 3) {
+                if(i > 1 && i < 4) {
+                    tempinput.label = textlabels[i]
+                    tempinput.addEventListener("change", e => {
+                        let elementlabel = e.originalTarget.label
+                        console.log(elementlabel)
+                        radioChange(elementlabel)
+                    })
+                    formshell.appendChild(tempinput)
+                    formshell.appendChild(templabel)
+                } else if(i == 4) {
+                    tempinput.id = "dateinput"
+                    templabel.id = "datelabel"
+                    tempinput.style.display = "none"
+                    templabel.style.display = "none"
                     formshell.appendChild(templabel)
                     formshell.appendChild(tempinput)
-                } else {
-                    formshell.appendChild(tempinput)
+                } else {  
                     formshell.appendChild(templabel)
+                    formshell.appendChild(tempinput)
                 }
 
             } else {
@@ -95,6 +109,18 @@ const formfuncs = (() => {
         }
 
         return formshell
+    }
+
+    function radioChange(elementlabel) {
+        let dateinput = document.querySelector("#dateinput")
+        let datelabel = document.querySelector("#datelabel")
+        if (elementlabel == "Whenever") {
+            dateinput.style.display = "none"
+            datelabel.style.display = "none"
+        } else {
+            dateinput.style.display = "block"
+            datelabel.style.display = "block"
+        }
     }
 
     function destroyForm(e) {
@@ -150,7 +176,7 @@ const projectfuncs = (() => {
         let todos = projects[index].todos
         let projecttodosarea = document.querySelector("#projecttodos")
         let addtodobtn = document.createElement("button")
-        addtodobtn.textContent = "minecrafttexturepaks"
+        addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
             formfuncs.appendForm(index)
             console.log(projects[index].todos)
