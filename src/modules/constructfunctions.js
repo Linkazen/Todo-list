@@ -109,6 +109,7 @@ const formfuncs = (() => {
             todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
         } else {
             projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+            projectfuncs.makeProjectSpace(projectstatus)
         }
     }
     
@@ -145,8 +146,7 @@ const formfuncs = (() => {
 })()
 
 const projectfuncs = (() => {
-    function makeProjectSpace(e) {
-        let index = e.srcElement.number
+    function makeProjectSpace(index) {
         let todos = projects[index].todos
         let projecttodosarea = document.querySelector("#projecttodos")
         let addtodobtn = document.createElement("button")
@@ -155,6 +155,7 @@ const projectfuncs = (() => {
             formfuncs.appendForm(index)
             console.log(projects[index].todos)
         })
+        projecttodosarea.innerHTML = ""
         projecttodosarea.appendChild(addtodobtn)
         projecttodosarea.appendChild(compileArray(todos))
 
@@ -177,7 +178,8 @@ const projectfuncs = (() => {
     function addListenToDivs(div) {
         for (let i = 0; i < div.children.length; i++) {
             div.children[i].addEventListener("click", e => {
-                makeProjectSpace(e)
+                let index = e.srcElement.number
+                makeProjectSpace(index)
             })
             
         }
@@ -191,7 +193,7 @@ const projectfuncs = (() => {
         projectsarea.appendChild(projectdiv)
     }
 
-    return { appendProjects }
+    return { appendProjects, makeProjectSpace }
 
 })()
 
