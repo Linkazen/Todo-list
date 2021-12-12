@@ -11,9 +11,9 @@ function todoConstructor(title, desc, datedue, priority) {
     return {title, desc, datedue, priority}
 }
 
-function projectConstructor(title, desc, datedue, priority) {
+function projectConstructor(title, desc, datedue, priority, number) {
     let todos = []
-    return {title, desc, datedue, priority, todos}
+    return {title, desc, datedue, priority, todos, number}
 }
 
 const formfuncs = (() => {
@@ -54,7 +54,7 @@ const formfuncs = (() => {
             "Create"
         ]
 
-        if (projectstatus) {
+        if (projectstatus === true) {
             textlabels[1] = "Project Description"
         }
 
@@ -83,7 +83,6 @@ const formfuncs = (() => {
                     tempinput.label = textlabels[i]
                     tempinput.addEventListener("change", e => {
                         let elementlabel = e.originalTarget.label
-                        console.log(elementlabel)
                         radioChange(elementlabel)
                     })
                     formshell.appendChild(tempinput)
@@ -129,10 +128,12 @@ const formfuncs = (() => {
     
     function makeTodo(projectstatus) {
         let form = document.querySelector("#todoform")
-        if(projectstatus == true) {
+        if(projectstatus === true) {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-        } else if (projectstatus == false) {
+            console.log("hello")
+        } else if (projectstatus === false) {
             todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+            console.log("hello2")
         } else {
             projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
             projectfuncs.makeProjectSpace(projectstatus)
@@ -179,7 +180,6 @@ const projectfuncs = (() => {
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
             formfuncs.appendForm(index)
-            console.log(projects[index].todos)
         })
         projecttodosarea.innerHTML = ""
         projecttodosarea.appendChild(addtodobtn)
