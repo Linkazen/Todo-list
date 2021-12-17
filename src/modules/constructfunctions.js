@@ -1,13 +1,19 @@
+import { format, add, isDate } from 'date-fns'
+
 let todos = []
 let projects = [
     projectConstructor("Today", "To-Dos that are due today.", undefined, undefined),
     projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined),
     projectConstructor("30 Days", "To-Dos that are due in 30 days.", undefined, undefined),
-    projectConstructor("Later", "To-Dos that are due after 30 days.", undefined, undefined),
+    projectConstructor("30+ Days", "To-Dos that are due after 30 days.", undefined, undefined),
+    projectConstructor("Misc", "Miscellaneous todos", undefined, undefined),
     projectConstructor("funnyman dice", "make some funnymen dice.", new Date(), true)
 ]
 
 function todoConstructor(title, desc, datedue, priority) {
+    datedue = format(new Date(datedue), 'yyyy/MM/d-h:m')
+    console.log(datedue)
+    
     return {title, desc, datedue, priority}
 }
 
@@ -132,8 +138,11 @@ const formfuncs = (() => {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
             console.log("hello")
         } else if (projectstatus === false) {
-            todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-            console.log("hello2")
+            let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked)
+            /*if (todo.datedue < new Date()) {
+                
+            }*/
+            todos.push()
         } else {
             projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
             projectfuncs.makeProjectSpace(projectstatus)

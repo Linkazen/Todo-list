@@ -5,8 +5,8 @@ let probtn = document.querySelector("#probtn")
 let projectbtn = document.querySelector("#projectsbtn")
 
 todobtn.addEventListener("click", () => {
-    appendForm(true)
+    appendForm(false)
 })
 probtn.addEventListener("click", () => {
-    appendForm(false)
+    appendForm(true)
 })
