@@ -1,13 +1,15 @@
-import { format, add, isDate } from 'date-fns'
+import { format, add, isDate, formatDistanceStrict } from 'date-fns'
 
-let todos = []
+let todos = [
+    todoConstructor("temptodo", "TEmp todo for testing", "12/11/2022", "12:12", undefined)
+]
+
 let projects = [
-    projectConstructor("Today", "To-Dos that are due today.", undefined, undefined),
-    projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined),
-    projectConstructor("30 Days", "To-Dos that are due in 30 days.", undefined, undefined),
-    projectConstructor("30+ Days", "To-Dos that are due after 30 days.", undefined, undefined),
-    projectConstructor("Misc", "Miscellaneous todos", undefined, undefined),
-    projectConstructor("funnyman dice", "make some funnymen dice.", new Date(), true)
+    projectConstructor("Today", "To-Dos that are due today.", undefined, undefined, undefined),
+    projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined, undefined),
+    projectConstructor("29 Days", "To-Dos that are due in 30 days.", undefined, undefined, undefined),
+    projectConstructor("29+ Days", "To-Dos that are due after 30 days.", undefined, undefined, undefined),
+    projectConstructor("Misc", "Miscellaneous todos", undefined, undefined, undefined),
 ]
 
 function todoConstructor(title, desc, date, time, priority) {
@@ -166,17 +168,47 @@ const formfuncs = (() => {
     function destroyForm(e) {
         e.srcElement.parentNode.remove()
     }
+
+    // goes through the todos in the arary and sorts them to where they should be
+    function todoSorter() {
+        for (let i = 0; i < todos.length; i++) {
+            let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
+            switch (timeUntilDueArr[1]) {
+                case "seconds":
+                case "minutes":
+                case "hours":
+                    projects[0].todos.push(todos[i])
+                    break;
+                case "days":
+                    if (parseInt(timeUntilDueArr[0]) <= 7) {
+                        projects[1].todos.push(todos[i])
+                    } else {
+                        projects[2].todos.push(todos[i])
+                    }
+                    break;
+                case undefined:
+                    projects[4].todos.push(todos[i])
+                    break;
+                default:
+                    projects[3].todos.push(todos[i])
+            }
+        }
+    }
     
     function makeTodo(projectstatus) {
         let form = document.querySelector("#todoform")
         console.log(form)
         if(projectstatus === true) {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+            todoSorter()
         } else if (projectstatus === false) {
-            let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
-            todos.push()
+            todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+            todoSorter()
         } else {
-            projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+            let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
+            projects[projectstatus].todos.push(todo)
+            todos.push(todo)
+            todoSorter()
             projectfuncs.makeProjectSpace(projectstatus)
         }
     }
