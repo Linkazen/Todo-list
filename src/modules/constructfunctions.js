@@ -171,6 +171,9 @@ const formfuncs = (() => {
 
     // goes through the todos in the arary and sorts them to where they should be
     function todoSorter() {
+        for (let i = 0; i < 5; i++) {
+            projects[i].todos = []
+        }
         for (let i = 0; i < todos.length; i++) {
             let timeUntilDueArr = []
             try {
