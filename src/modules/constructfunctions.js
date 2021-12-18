@@ -10,14 +10,31 @@ let projects = [
     projectConstructor("funnyman dice", "make some funnymen dice.", new Date(), true)
 ]
 
-function todoConstructor(title, desc, datedue, priority) {
-    datedue = format(new Date(datedue), 'yyyy/MM/d-h:m')
-    console.log(datedue)
-    
+function todoConstructor(title, desc, date, time, priority) {
+    let datedue = ""
+    if (date === "" && time === "") {
+        datedue = "whenever"
+    } else if (time === "") {
+        datedue = new Date(Date.parse(`${date} 00:00`))
+    } else if (date === "") {
+        datedue = new Date(Date.parse(`${format(new Date(), "yyyy/MM/dd")} ${time}`))
+    } else {
+        datedue = new Date(Date.parse(`${date} ${time}`))
+    }
     return {title, desc, datedue, priority}
 }
 
-function projectConstructor(title, desc, datedue, priority, number) {
+function projectConstructor(title, desc, date, time, priority, number) {
+    let datedue = ""
+    if (date === "" && time === "") {
+        datedue = "whenever"
+    } else if (time === "") {
+        datedue = new Date(Date.parse(`${date} 00:00`))
+    } else if (date === "") {
+        datedue = new Date(Date.parse(`${format(new Date(), "yyyy/MM/dd")} ${time}`))
+    } else {
+        datedue = new Date(Date.parse(`${date} ${time}`))
+    }
     let todos = []
     return {title, desc, datedue, priority, todos, number}
 }
@@ -34,6 +51,7 @@ const formfuncs = (() => {
             "desc", 
             "date", 
             "date", 
+            "pickdate",
             "picktime", 
             "important"
         ]
@@ -43,7 +61,8 @@ const formfuncs = (() => {
             "text",
             "radio",
             "radio",
-            "datetime-local",
+            "date",
+            "time",
             "checkbox",
             "button",
             "button"
@@ -54,7 +73,8 @@ const formfuncs = (() => {
             "To-Do Description", 
             "Whenever", 
             "Specific date", 
-            "Pick a date and time",
+            "Pick a date",
+            "Pick a time",
             "Important?",
             "Close",
             "Create"
@@ -96,7 +116,15 @@ const formfuncs = (() => {
                 } else if(i == 4) {
                     tempinput.id = "dateinput"
                     templabel.id = "datelabel"
-                    tempinput.min = format(new Date(), "yyyy-MM-dd'T'hh:mm")
+                    tempinput.min = format(new Date(), "yyyy-MM-dd")
+                    tempinput.style.display = "none"
+                    templabel.style.display = "none"
+                    formshell.appendChild(templabel)
+                    formshell.appendChild(tempinput)
+                } else if (i == 5) {
+                    tempinput.id = "timeinput"
+                    templabel.id = "timelabel"
+                    tempinput.min = format(new Date(), "hh:mm")
                     tempinput.style.display = "none"
                     templabel.style.display = "none"
                     formshell.appendChild(templabel)
@@ -120,12 +148,18 @@ const formfuncs = (() => {
     function radioChange(elementlabel) {
         let dateinput = document.querySelector("#dateinput")
         let datelabel = document.querySelector("#datelabel")
+        let timeinput = document.querySelector("#timeinput")
+        let timelabel = document.querySelector("#timelabel")
         if (elementlabel == "Whenever") {
             dateinput.style.display = "none"
             datelabel.style.display = "none"
+            timeinput.style.display = "none"
+            timelabel.style.display = "none"
         } else {
             dateinput.style.display = "block"
             datelabel.style.display = "block"
+            timeinput.style.display = "block"
+            timelabel.style.display = "block"
         }
     }
 
@@ -135,22 +169,23 @@ const formfuncs = (() => {
     
     function makeTodo(projectstatus) {
         let form = document.querySelector("#todoform")
+        console.log(form)
         if(projectstatus === true) {
-            projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+            projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
         } else if (projectstatus === false) {
-            let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked)
+            let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
             todos.push()
         } else {
-            projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
+            projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
             projectfuncs.makeProjectSpace(projectstatus)
         }
     }
     
     function addFormBtnListeners(form, projectstatus) {
-        form[6].addEventListener("click", e => {
+        form[form.length - 2].addEventListener("click", e => {
             destroyForm(e)
         })
-        form[7].addEventListener("click", e => {
+        form[form.length - 1].addEventListener("click", e => {
             makeTodo(projectstatus)
             projectfuncs.appendProjects()
             destroyForm(e)
