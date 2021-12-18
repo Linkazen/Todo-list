@@ -96,6 +96,7 @@ const formfuncs = (() => {
                 } else if(i == 4) {
                     tempinput.id = "dateinput"
                     templabel.id = "datelabel"
+                    tempinput.min = format(new Date(), "yyyy-MM-dd'T'hh:mm")
                     tempinput.style.display = "none"
                     templabel.style.display = "none"
                     formshell.appendChild(templabel)
@@ -136,12 +137,8 @@ const formfuncs = (() => {
         let form = document.querySelector("#todoform")
         if(projectstatus === true) {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
-            console.log("hello")
         } else if (projectstatus === false) {
             let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked)
-            /*if (todo.datedue < new Date()) {
-                
-            }*/
             todos.push()
         } else {
             projects[projectstatus].todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].checked))
