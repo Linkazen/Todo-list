@@ -172,32 +172,34 @@ const formfuncs = (() => {
     // goes through the todos in the arary and sorts them to where they should be
     function todoSorter() {
         for (let i = 0; i < todos.length; i++) {
-            let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
-            switch (timeUntilDueArr[1]) {
-                case "seconds":
-                case "minutes":
-                case "hours":
-                    projects[0].todos.push(todos[i])
-                    break;
-                case "days":
-                    if (parseInt(timeUntilDueArr[0]) <= 7) {
-                        projects[1].todos.push(todos[i])
-                    } else {
-                        projects[2].todos.push(todos[i])
-                    }
-                    break;
-                case undefined:
-                    projects[4].todos.push(todos[i])
-                    break;
-                default:
-                    projects[3].todos.push(todos[i])
+            let timeUntilDueArr = []
+            try {
+                timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
+                switch (timeUntilDueArr[1]) {
+                    case "seconds":
+                    case "minutes":
+                    case "hours":
+                        projects[0].todos.push(todos[i])
+                        break;
+                    case "days":
+                        if (parseInt(timeUntilDueArr[0]) <= 7) {
+                            projects[1].todos.push(todos[i])
+                        } else {
+                            projects[2].todos.push(todos[i])
+                        }
+                        break;
+                    default:
+                        projects[3].todos.push(todos[i])
+                }
+            }
+            catch {
+                projects[4].todos.push(todos[i])
             }
         }
     }
     
     function makeTodo(projectstatus) {
         let form = document.querySelector("#todoform")
-        console.log(form)
         if(projectstatus === true) {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
             todoSorter()
