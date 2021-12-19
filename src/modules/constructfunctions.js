@@ -26,7 +26,7 @@ function todoConstructor(title, desc, date, time, priority) {
     return {title, desc, datedue, priority}
 }
 
-function projectConstructor(title, desc, date, time, priority, number) {
+function projectConstructor(title, desc, date, time, priority) {
     let datedue = ""
     if (date === "" && time === "") {
         datedue = "whenever"
@@ -38,10 +38,14 @@ function projectConstructor(title, desc, date, time, priority, number) {
         datedue = new Date(Date.parse(`${date} ${time}`))
     }
     let todos = []
-    return {title, desc, datedue, priority, todos, number}
+    return {title, desc, datedue, priority, todos}
 }
 
 const formfuncs = (() => {
+
+    function renameTodoOrProject(e) {
+        e.originalTarget
+    }
 
     // Function that returns the form for the user to fill out to make a todo
     function createForm(projectstatus) {
@@ -169,7 +173,7 @@ const formfuncs = (() => {
         e.srcElement.parentNode.remove()
     }
 
-    // goes through the todos in the arary and sorts them to where they should be
+    // goes through the todos in the array and sorts them to where they should be
     function todoSorter() {
         for (let i = 0; i < 5; i++) {
             projects[i].todos = []
@@ -223,8 +227,10 @@ const formfuncs = (() => {
             destroyForm(e)
         })
         form[form.length - 1].addEventListener("click", e => {
+            let index = document.querySelector("#projecttodos").currentNumber
             makeTodo(projectstatus)
             projectfuncs.appendProjects()
+            projectfuncs.makeProjectSpace(index)
             destroyForm(e)
         })
     }
@@ -247,20 +253,27 @@ const formfuncs = (() => {
         mainarea.appendChild(form)
     }
 
-    return {appendForm}
+    return {appendForm, todoSorter}
 })()
 
 const projectfuncs = (() => {
-    function makeProjectSpace(index) {
-        let todos = projects[index].todos
-        let projecttodosarea = document.querySelector("#projecttodos")
+    function addBtnToProject() {
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
             formfuncs.appendForm(index)
         })
+        return addtodobtn
+    }
+
+    function makeProjectSpace(index) {
+        let todos = projects[index].todos
+        let projecttodosarea = document.querySelector("#projecttodos")
+        projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
-        projecttodosarea.appendChild(addtodobtn)
+        if (index > 4) {
+            projecttodosarea.appendChild(addBtnToProject())
+        }
         projecttodosarea.appendChild(compileArray(todos))
 
     }
@@ -302,5 +315,6 @@ const projectfuncs = (() => {
 })()
 
 let appendForm = formfuncs.appendForm
+
 
 export { appendForm }
