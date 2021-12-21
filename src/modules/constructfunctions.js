@@ -205,8 +205,7 @@ const formfuncs = (() => {
         }
     }
     
-    function makeTodo(projectstatus) {
-        let form = document.querySelector("#todoform")
+    function makeTodo(projectstatus, form) {
         if(projectstatus === true) {
             projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
             todoSorter()
@@ -227,11 +226,14 @@ const formfuncs = (() => {
             destroyForm(e)
         })
         form[form.length - 1].addEventListener("click", e => {
+            if (form[0].value == "") {
+                return
+            }
             let index = document.querySelector("#projecttodos").currentNumber
-            makeTodo(projectstatus)
+            makeTodo(projectstatus, form)
             projectfuncs.appendProjects()
-            projectfuncs.makeProjectSpace(index)
             destroyForm(e)
+            projectfuncs.makeProjectSpace(index)
         })
     }
 
