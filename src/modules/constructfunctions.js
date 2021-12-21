@@ -1,8 +1,8 @@
 import { format, add, isDate, formatDistanceStrict } from 'date-fns'
 
-let todos = [
-    todoConstructor("temptodo", "TEmp todo for testing", "12/11/2022", "12:12", undefined)
-]
+// localStorage.setItem(todos)
+
+let todos = []
 
 let projects = [
     projectConstructor("Today", "To-Dos that are due today.", undefined, undefined, undefined),
@@ -248,6 +248,7 @@ const formfuncs = (() => {
     function appendForm(projectstatus) {
         let mainarea = document.querySelector("#content")
         let form = createForm(projectstatus)
+        form.id = "todoform"
         checkForm()
         addFormBtnListeners(form, projectstatus)
         mainarea.appendChild(form)
@@ -257,7 +258,7 @@ const formfuncs = (() => {
 })()
 
 const projectfuncs = (() => {
-    function addBtnToProject() {
+    function addBtnToProject(index) {
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
@@ -272,7 +273,7 @@ const projectfuncs = (() => {
         projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
         if (index > 4) {
-            projecttodosarea.appendChild(addBtnToProject())
+            projecttodosarea.appendChild(addBtnToProject(index))
         }
         projecttodosarea.appendChild(compileArray(todos))
 
@@ -315,6 +316,6 @@ const projectfuncs = (() => {
 })()
 
 let appendForm = formfuncs.appendForm
+let appendProjects = projectfuncs.appendProjects
 
-
-export { appendForm }
+export { appendForm, appendProjects }

@@ -1,4 +1,5 @@
 import { appendForm, appendProjects } from "./modules/constructfunctions";
+import './style.css'
 
 let todobtn = document.querySelector("#todobtn")
 let probtn = document.querySelector("#probtn")
@@ -10,3 +11,5 @@ todobtn.addEventListener("click", () => {
 probtn.addEventListener("click", () => {
     appendForm(true)
 })
+
+appendProjects()
