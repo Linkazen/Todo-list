@@ -272,11 +272,27 @@ const projectfuncs = (() => {
         return addtodobtn
     }
 
+    function appendTodo(todo) {
+        let array = []
+        let doc1 = document.createElement("h1")
+        let doc2 = document.createElement("p")
+        let doc3 = document.createElement("p")
+        doc1.textContent = `${todo.title}`
+        doc2.textContent = `${todo.desc}`
+        doc3.textContent = `${todo.datedue}`
+        array.push(doc1)
+        array.push(doc2)
+        array.push(doc3)
+        let todoinfo = document.querySelector("#todoinfo")
+        for (let i = 0; i < 3; i++) {
+            todoinfo.appendChild(array[i])
+        }
+    }
+
     function makeProjectSpace(index) {
         let todos = projects[index].todos
         let projecttodosarea = document.querySelector("#todos")
         let compiledtodos = compileArray(todos)
-        console.log(compiledtodos)
         projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
         if (index > 4) {
@@ -286,7 +302,8 @@ const projectfuncs = (() => {
             compiledtodos[i].addEventListener("click", e => {
                 let projectnum = e.originalTarget.parentElement.currentNumber
                 let todonum = e.originalTarget.number
-                // projects[projectnum].todos[todonum]
+                let todo = projects[projectnum].todos[todonum]
+                appendTodo(todo)
             })
             projecttodosarea.appendChild(compiledtodos[i])
         }
