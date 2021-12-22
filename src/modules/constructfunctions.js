@@ -229,10 +229,13 @@ const formfuncs = (() => {
             if (form[0].value == "") {
                 return
             }
-            let index = document.querySelector("#projecttodos").currentNumber
+            let index = document.querySelector("#todos").currentNumber
             makeTodo(projectstatus, form)
             projectfuncs.appendProjects()
             destroyForm(e)
+            if (index === undefined) {
+                return
+            }
             projectfuncs.makeProjectSpace(index)
         })
     }
@@ -271,46 +274,56 @@ const projectfuncs = (() => {
 
     function makeProjectSpace(index) {
         let todos = projects[index].todos
-        let projecttodosarea = document.querySelector("#projecttodos")
+        let projecttodosarea = document.querySelector("#todos")
+        let compiledtodos = compileArray(todos)
+        console.log(compiledtodos)
         projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
         if (index > 4) {
             projecttodosarea.appendChild(addBtnToProject(index))
         }
-        projecttodosarea.appendChild(compileArray(todos))
+        for (let i = 0; i < compiledtodos.length; i++) {
+            compiledtodos[i].addEventListener("click", e => {
+                let projectnum = e.originalTarget.parentElement.currentNumber
+                let todonum = e.originalTarget.number
+                // projects[projectnum].todos[todonum]
+            })
+            projecttodosarea.appendChild(compiledtodos[i])
+        }
 
     }
     
     // compiles all elements in an array into a div
     function compileArray(array) {
-        let projectsDiv = document.createElement("div")
+        let compiledArray = []
         
         for (let i = 0; i < array.length; i++) {
-            let project = document.createElement("div")
-            project.textContent = array[i].title
-            project.number = i
-            projectsDiv.appendChild(project)
+            let element = document.createElement("div")
+            element.textContent = array[i].title
+            element.number = i
+            compiledArray.push(element)
         }
     
-        return projectsDiv
+        return compiledArray
     }
     
-    function addListenToDivs(div) {
-        for (let i = 0; i < div.children.length; i++) {
-            div.children[i].addEventListener("click", e => {
+    function addListenToDivs(divs) {
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].addEventListener("click", e => {
                 let index = e.srcElement.number
                 makeProjectSpace(index)
             })
-            
         }
     }
     
     function appendProjects() {
         let projectsarea = document.querySelector("#projectsarea")
-        let projectdiv = compileArray(projects)
+        let projectarr = compileArray(projects)
         projectsarea.innerHTML = ""
-        addListenToDivs(projectdiv)
-        projectsarea.appendChild(projectdiv)
+        addListenToDivs(projectarr)
+        for (let i = 0; i < projectarr.length; i++) {
+            projectsarea.appendChild(projectarr[i])
+        }
     }
 
     return { appendProjects, makeProjectSpace }
