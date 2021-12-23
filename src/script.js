@@ -1,4 +1,4 @@
-import { appendForm, appendProjects } from "./modules/constructfunctions";
+import { appendForm, appendProjects } from "./modules/DOMManip";
 import './style.css'
 
 let todobtn = document.querySelector("#todobtn")
