@@ -210,6 +210,7 @@ const domFuncs = (() => {
                 let pronum = e.originalTarget.parentElement.currentNumber
                 let tonum = e.originalTarget.number
                 let tododivs =  returnTodoElements(returnProjectTodo(pronum, tonum))
+                todoinfo.innerHTML = ""
                 for (let t = 0; t < 3; t++) {
                     todoinfo.appendChild(tododivs[t])
                 }
