@@ -1,8 +1,10 @@
 import { format, add, isDate, formatDistanceStrict } from 'date-fns'
 
-// localStorage.setItem(todos)
-
 let todos = []
+
+if (localStorage.getItem("todos") != null) {
+    todos = JSON.parse(localStorage.getItem("todos"))
+}
 
 let projects = [
     projectConstructor("Today", "To-Dos that are due today.", undefined, undefined, undefined),
@@ -11,6 +13,10 @@ let projects = [
     projectConstructor("29+ Days", "To-Dos that are due after 30 days.", undefined, undefined, undefined),
     projectConstructor("Misc", "Miscellaneous todos", undefined, undefined, undefined),
 ]
+
+if (localStorage.getItem("projects") != null) {
+    projects = JSON.parse(localStorage.getItem("projects"))
+}
 
 function todoConstructor(title, desc, date, time, priority) {
     let datedue = ""
@@ -86,6 +92,8 @@ function makeTodo(projectstatus, form) {
         todos.push(todo)
         todoSorter()
     }
+    localStorage.setItem("todos", JSON.stringify(todos))
+    localStorage.setItem("projects", JSON.stringify(projects))
 }
 
 // compiles all elements in an array into a div    
