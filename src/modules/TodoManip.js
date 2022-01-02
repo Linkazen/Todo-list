@@ -2,12 +2,32 @@ import { format, add, isDate, formatDistanceStrict } from 'date-fns'
 
 let todos = []
 
+// btn for clearing out local storage for testing purposes
+let localprobtn = document.createElement("button")
+localprobtn.innerText = "clear local storage"
+localprobtn.addEventListener("click", function() {
+    localStorage.clear()
+})
+document.querySelector('#topdiv').appendChild(localprobtn)
+
 if (localStorage.getItem("todos") != null) {
     todos = JSON.parse(localStorage.getItem("todos"))
+    todos.forEach(element => storeDateObjConv(element, false))
+}
+
+// converts the local storage dates from strings to date objects
+function storeDateObjConv(obj, proTrue) {
+    if (obj.datedue != undefined || obj.datedue != "whenever") {
+        obj.datedue = new Date(Date.parse(obj.datedue))
+        console.log(obj.datedue)
+    }
+    if (proTrue === true) {
+        obj.todos.forEach(element => storeDateObjConv(element, false))
+    }
 }
 
 let projects = [
-    projectConstructor("Today", "To-Dos that are due today.", undefined, undefined, undefined),
+    projectConstructor("24 hours", "To-Dos that are due today.", undefined, undefined, undefined),
     projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined, undefined),
     projectConstructor("29 Days", "To-Dos that are due in 30 days.", undefined, undefined, undefined),
     projectConstructor("29+ Days", "To-Dos that are due after 30 days.", undefined, undefined, undefined),
@@ -16,6 +36,7 @@ let projects = [
 
 if (localStorage.getItem("projects") != null) {
     projects = JSON.parse(localStorage.getItem("projects"))
+    projects.forEach(element => storeDateObjConv(element, true))
 }
 
 function todoConstructor(title, desc, date, time, priority) {
@@ -56,6 +77,7 @@ function todoSorter() {
         let timeUntilDueArr = []
         try {
             timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
+            console.log(timeUntilDueArr)
             switch (timeUntilDueArr[1]) {
                 case "seconds":
                 case "minutes":
