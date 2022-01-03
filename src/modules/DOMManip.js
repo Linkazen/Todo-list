@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import { makeTodo, compileArray, returnProjectTodo } from './TodoManip'
+import { makeTodo, compileArray, returnProjectTodo, renameProTodo, todoSorter } from './TodoManip'
 
 const formfuncs = (() => {
     // Function that returns the form for the user to fill out to make a todo
@@ -180,7 +180,12 @@ const domFuncs = (() => {
         let doc3 = document.createElement("p")
         doc1.textContent = `${todo.title}`
         doc2.textContent = `${todo.desc}`
-        doc3.textContent = `${todo.datedue}`
+        try {
+            doc3.textContent = `${format(todo.datedue, "yyyy/MM/dd hh:mm")}`
+        }
+        catch {
+            doc3.textContent = `Whenever`
+        }
         array.push(doc1)
         array.push(doc2)
         array.push(doc3)
@@ -207,11 +212,33 @@ const domFuncs = (() => {
         for (let i = 0; i < compiledtodos.length; i++) {
             compiledtodos[i].addEventListener("click", e => {
                 let todoinfo = document.querySelector("#todoinfo")
+                let protodonum = e.originalTarget.number
                 let pronum = e.originalTarget.parentElement.currentNumber
-                let tonum = e.originalTarget.number
-                let tododivs =  returnTodoElements(returnProjectTodo(pronum, tonum))
+                let todo = returnProjectTodo(pronum, protodonum)
+                let todonum = e.originalTarget.todoNum
+                console.log("test1")
+                let tododivs = returnTodoElements(todo)
+                console.log("test2")
+                let origpronum = todo.projectnum
+                
+                let renamebtn = document.createElement("button")
+                renamebtn.addEventListener("click", function() {
+                    renameProTodo("renametest", origpronum, protodonum, todonum)
+                    todoSorter()
+                    appendProjects()
+                })
+                renamebtn.textContent = "rename"
+                tododivs.push(renamebtn)
+
+                /*let deletebtn = document.createElement("button")
+                deletebtn.addEventListener("click", function() {
+                    deleteProTodo(todo, todonum, "renametest")
+                })
+                deletebtn.textContent = "delete"
+                tododivs.push(deletebtn)*/
+
                 todoinfo.innerHTML = ""
-                for (let t = 0; t < 3; t++) {
+                for (let t = 0; t < tododivs.length; t++) {
                     todoinfo.appendChild(tododivs[t])
                 }
             })

@@ -15,17 +15,6 @@ if (localStorage.getItem("todos") != null) {
     todos.forEach(element => storeDateObjConv(element, false))
 }
 
-// converts the local storage dates from strings to date objects
-function storeDateObjConv(obj, proTrue) {
-    if (obj.datedue != undefined || obj.datedue != "whenever") {
-        obj.datedue = new Date(Date.parse(obj.datedue))
-        console.log(obj.datedue)
-    }
-    if (proTrue === true) {
-        obj.todos.forEach(element => storeDateObjConv(element, false))
-    }
-}
-
 let projects = [
     projectConstructor("24 hours", "To-Dos that are due today.", undefined, undefined, undefined),
     projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined, undefined),
@@ -50,7 +39,9 @@ function todoConstructor(title, desc, date, time, priority) {
     } else {
         datedue = new Date(Date.parse(`${date} ${time}`))
     }
-    return {title, desc, datedue, priority}
+    let todonum = todos.length
+    let projectnum = undefined
+    return {title, desc, datedue, priority, todonum, projectnum}
 }
 
 function projectConstructor(title, desc, date, time, priority) {
@@ -66,6 +57,32 @@ function projectConstructor(title, desc, date, time, priority) {
     }
     let todos = []
     return {title, desc, datedue, priority, todos}
+}
+
+// converts the local storage dates from strings to date objects
+function storeDateObjConv(obj, proTrue) {
+    if (obj.datedue != undefined || obj.datedue != "whenever") {
+        obj.datedue = new Date(Date.parse(obj.datedue))
+        console.log(obj.datedue)
+    }
+    if (proTrue === true) {
+        obj.todos.forEach(element => storeDateObjConv(element, false))
+    }
+}
+
+function renameProTodo(newTitle, pronum, protodonum, todonum) {
+    if (pronum != undefined) {
+        projects[pronum].todos[protodonum].title = `${newTitle}`
+    }
+    console.log(todonum)
+    todos[todonum].title = `${newTitle}`
+    console.log(todos)
+    localStorage.setItem("todos", JSON.stringify(todos))
+    localStorage.setItem("projects", JSON.stringify(projects))
+}
+
+function deleteProTodo(index) {
+    
 }
 
 // goes through the todos in the array and sorts them to where they should be
@@ -110,6 +127,7 @@ function makeTodo(projectstatus, form) {
         todoSorter()
     } else {
         let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
+        todo.projectnum = projectstatus
         projects[projectstatus].todos.push(todo)
         todos.push(todo)
         todoSorter()
@@ -132,6 +150,10 @@ function compileArray(value) {
         let element = document.createElement("div")
         element.textContent = arr[i].title
         element.number = i
+        if (value != "projects") {
+            element.todoNum = arr[i].todonum
+            console.log(arr[i].todonum)
+        }
         compiledArray.push(element)
     }
 
@@ -143,4 +165,4 @@ function returnProjectTodo(projectnum, todonum) {
     return todo
 }
 
-export {makeTodo, compileArray, returnProjectTodo}
+export {makeTodo, compileArray, returnProjectTodo, renameProTodo, todoSorter}
