@@ -63,26 +63,30 @@ function projectConstructor(title, desc, date, time, priority) {
 function storeDateObjConv(obj, proTrue) {
     if (obj.datedue != undefined || obj.datedue != "whenever") {
         obj.datedue = new Date(Date.parse(obj.datedue))
-        console.log(obj.datedue)
     }
     if (proTrue === true) {
         obj.todos.forEach(element => storeDateObjConv(element, false))
     }
 }
 
-function renameProTodo(newTitle, pronum, protodonum, todonum) {
+function renameTodo(newTitle, pronum, protodonum, todonum) {
     if (pronum != undefined) {
         projects[pronum].todos[protodonum].title = `${newTitle}`
     }
-    console.log(todonum)
     todos[todonum].title = `${newTitle}`
-    console.log(todos)
-    localStorage.setItem("todos", JSON.stringify(todos))
-    localStorage.setItem("projects", JSON.stringify(projects))
 }
 
-function deleteProTodo(index) {
-    
+function deleteTodo(pronum, protodonum, todonum) {
+    todos.splice(todonum, 1)
+    if (pronum != undefined) {
+        projects[pronum].todos.splice(protodonum, 1)
+        for (let i = protodonum; i < projects[pronum].todos.length; i++) {
+            projects[pronum].todos[i].todonum -= 1
+        }
+    }
+    for (let i = todonum; i < todos.length; i++) {
+        todos[i].todonum -= 1
+    }
 }
 
 // goes through the todos in the array and sorts them to where they should be
@@ -94,7 +98,6 @@ function todoSorter() {
         let timeUntilDueArr = []
         try {
             timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
-            console.log(timeUntilDueArr)
             switch (timeUntilDueArr[1]) {
                 case "seconds":
                 case "minutes":
@@ -132,6 +135,10 @@ function makeTodo(projectstatus, form) {
         todos.push(todo)
         todoSorter()
     }
+    saveArrs()
+}
+
+function saveArrs() {
     localStorage.setItem("todos", JSON.stringify(todos))
     localStorage.setItem("projects", JSON.stringify(projects))
 }
@@ -152,7 +159,6 @@ function compileArray(value) {
         element.number = i
         if (value != "projects") {
             element.todoNum = arr[i].todonum
-            console.log(arr[i].todonum)
         }
         compiledArray.push(element)
     }
@@ -165,4 +171,7 @@ function returnProjectTodo(projectnum, todonum) {
     return todo
 }
 
-export {makeTodo, compileArray, returnProjectTodo, renameProTodo, todoSorter}
+console.log(projects)
+console.log(todos)
+
+export {makeTodo, compileArray, returnProjectTodo, renameTodo, deleteTodo, todoSorter, saveArrs}

@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import { makeTodo, compileArray, returnProjectTodo, renameProTodo, todoSorter } from './TodoManip'
+import { makeTodo, compileArray, returnProjectTodo, renameTodo, deleteTodo, todoSorter, saveArrs } from './TodoManip'
 
 const formfuncs = (() => {
     // Function that returns the form for the user to fill out to make a todo
@@ -215,27 +215,35 @@ const domFuncs = (() => {
                 let protodonum = e.originalTarget.number
                 let pronum = e.originalTarget.parentElement.currentNumber
                 let todo = returnProjectTodo(pronum, protodonum)
-                let todonum = e.originalTarget.todoNum
-                console.log("test1")
+                let todonum = todo.todonum
                 let tododivs = returnTodoElements(todo)
-                console.log("test2")
                 let origpronum = todo.projectnum
                 
                 let renamebtn = document.createElement("button")
                 renamebtn.addEventListener("click", function() {
-                    renameProTodo("renametest", origpronum, protodonum, todonum)
+                    renameTodo("renametest", origpronum, protodonum, todonum)
                     todoSorter()
                     appendProjects()
+                    let projects = document.querySelector("#projectsarea").children
+                    projects[pronum].click()
+                    todoinfo.innerHTML = ""
+                    saveArrs()
                 })
                 renamebtn.textContent = "rename"
                 tododivs.push(renamebtn)
 
-                /*let deletebtn = document.createElement("button")
+                let deletebtn = document.createElement("button")
                 deletebtn.addEventListener("click", function() {
-                    deleteProTodo(todo, todonum, "renametest")
+                    deleteTodo(origpronum, protodonum, todonum)
+                    todoSorter()
+                    appendProjects()
+                    let projects = document.querySelector("#projectsarea").children
+                    projects[pronum].click()
+                    todoinfo.innerHTML = ""
+                    saveArrs()
                 })
                 deletebtn.textContent = "delete"
-                tododivs.push(deletebtn)*/
+                tododivs.push(deletebtn)
 
                 todoinfo.innerHTML = ""
                 for (let t = 0; t < tododivs.length; t++) {
