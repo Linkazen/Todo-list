@@ -73,6 +73,7 @@ function renameTodo(newTitle, pronum, protodonum, todonum) {
     if (pronum != undefined) {
         projects[pronum].todos[protodonum].title = `${newTitle}`
     }
+    console.log(todonum)
     todos[todonum].title = `${newTitle}`
 }
 

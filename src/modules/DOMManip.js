@@ -1,6 +1,10 @@
 import {format} from 'date-fns'
 import { makeTodo, compileArray, returnProjectTodo, renameTodo, deleteTodo, todoSorter, saveArrs } from './TodoManip'
 
+function destroyForm(e) {
+    e.srcElement.parentNode.remove()
+}
+
 const formfuncs = (() => {
     // Function that returns the form for the user to fill out to make a todo
     function createForm(projectstatus) {
@@ -110,10 +114,6 @@ const formfuncs = (() => {
             }
         }
     }
-
-    function destroyForm(e) {
-        e.srcElement.parentNode.remove()
-    }
     
     function destroyTodoInfo() {
         let todoinfo = document.querySelector("#todoinfo")
@@ -152,7 +152,6 @@ const formfuncs = (() => {
     function appendForm(projectstatus) {
         let mainarea = document.querySelector("#content")
         let form = createForm(projectstatus)
-        form.id = "todoform"
         checkForm()
         addFormBtnListeners(form, projectstatus)
         mainarea.appendChild(form)
@@ -201,6 +200,51 @@ const domFuncs = (() => {
         }
     }
 
+    function confirmRename(e, protodonum, pronum, todonum, origpronum) {
+        let newName = e.originalTarget.parentElement[0].value
+        renameTodo(newName, origpronum, protodonum, todonum)
+        console.log("hello")
+        todoSorter()
+        appendProjects()
+        let projects = document.querySelector("#projectsarea").children
+        console.log(pronum)
+        projects[pronum].click()
+        todoinfo.innerHTML = ""
+        saveArrs()
+    }
+
+    function makeRenameForm(protodonum, pronum, todonum, origpronum) {
+        let form = document.createElement("form")
+
+        let label = document.createElement("label")
+        label.textContent = "Rename Todo?"
+        label.for = "rename"
+
+        let text = document.createElement("input")
+        text.type = "text"
+        text.name = "rename"
+        
+        let cnclbtn = document.createElement("button")
+        cnclbtn.textContent = "cancel"
+        cnclbtn.type = "button"
+        cnclbtn.addEventListener("click", function(e) {
+            destroyForm(e)
+        })
+
+        let confbtn = document.createElement("button")
+        confbtn.textContent = "confirm"
+        confbtn.type = "button"
+        confbtn.addEventListener("click", function(e) {
+            confirmRename(e, protodonum, pronum, todonum, origpronum)
+        })
+
+        form.appendChild(label)
+        form.appendChild(text)
+        form.appendChild(cnclbtn)
+        form.appendChild(confbtn)
+        return form
+    }
+
     function makeProjectSpace(index) {
         let projecttodosarea = document.querySelector("#todos")
         let compiledtodos = compileArray(index)
@@ -221,13 +265,8 @@ const domFuncs = (() => {
                 
                 let renamebtn = document.createElement("button")
                 renamebtn.addEventListener("click", function() {
-                    renameTodo("renametest", origpronum, protodonum, todonum)
-                    todoSorter()
-                    appendProjects()
-                    let projects = document.querySelector("#projectsarea").children
-                    projects[pronum].click()
-                    todoinfo.innerHTML = ""
-                    saveArrs()
+                    let mainarea = document.querySelector("#content")
+                    mainarea.appendChild(makeRenameForm(protodonum, pronum, todonum, origpronum))
                 })
                 renamebtn.textContent = "rename"
                 tododivs.push(renamebtn)
