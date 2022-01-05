@@ -183,24 +183,10 @@ function deleteProject(num) {
         })
     })
     
-
-    /*for (let i = 0; i < todos.length; i++) {
-        if (indexes.some(element => (element === i))) {
-            let num = i
-            for (let n = indexes.indexOf(i); n < indexes.length; n++) {
-                if (indexes[n + 1] == (num += 1)) {
-                    minusAmount += 1
-                } else {
-                    break
-                }
-            }
-        } else if (i < indexes[0]) {
-            continue
-        } else {
-            todos[i].todonum -= minusAmount
-        }
-        
-    }*/
+    for (let i = indexes[0]; i < todos.length; i++) {
+        todos[i].todonum = i
+    }
+    
     console.log(todos)
     projects.splice(num, 1)
 }
