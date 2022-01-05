@@ -167,12 +167,56 @@ function compileArray(value) {
     return compiledArray
 }
 
+
+function deleteProject(num) {
+    let projectTodos = projects[num].todos
+    let indexes = []
+    let minusAmount = 1
+
+    for (let i = 0; i < projectTodos.length; i++) {
+        indexes.push(projectTodos[i].todonum)
+    }
+
+    todos = todos.filter(element => {
+        return false == indexes.some(ele => {
+            return ele == element.todonum 
+        })
+    })
+    
+
+    /*for (let i = 0; i < todos.length; i++) {
+        if (indexes.some(element => (element === i))) {
+            let num = i
+            for (let n = indexes.indexOf(i); n < indexes.length; n++) {
+                if (indexes[n + 1] == (num += 1)) {
+                    minusAmount += 1
+                } else {
+                    break
+                }
+            }
+        } else if (i < indexes[0]) {
+            continue
+        } else {
+            todos[i].todonum -= minusAmount
+        }
+        
+    }*/
+    console.log(todos)
+    projects.splice(num, 1)
+}
+
 function returnProjectTodo(projectnum, todonum) {
     let todo = projects[projectnum].todos[todonum]
     return todo
 }
 
-console.log(projects)
-console.log(todos)
-
-export {makeTodo, compileArray, returnProjectTodo, renameTodo, deleteTodo, todoSorter, saveArrs}
+export {
+    makeTodo, 
+    compileArray, 
+    returnProjectTodo, 
+    renameTodo, 
+    deleteTodo, 
+    todoSorter, 
+    saveArrs, 
+    deleteProject
+}

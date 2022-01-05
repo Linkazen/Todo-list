@@ -1,5 +1,14 @@
 import {format} from 'date-fns'
-import { makeTodo, compileArray, returnProjectTodo, renameTodo, deleteTodo, todoSorter, saveArrs } from './TodoManip'
+import { 
+    makeTodo, 
+    compileArray, 
+    returnProjectTodo, 
+    renameTodo, 
+    deleteTodo, 
+    todoSorter, 
+    saveArrs, 
+    deleteProject 
+} from './TodoManip'
 
 function destroyForm(e) {
     e.srcElement.parentNode.remove()
@@ -163,15 +172,6 @@ const formfuncs = (() => {
 
 
 const domFuncs = (() => {
-    function addBtnToProject(index) {
-        let addtodobtn = document.createElement("button")
-        addtodobtn.textContent = "Add To-Do to Project"
-        addtodobtn.addEventListener("click", () => {
-            formfuncs.appendForm(index)
-        })
-        return addtodobtn
-    }
-
     function returnTodoElements(todo) {
         let array = []
         let doc1 = document.createElement("h1")
@@ -189,15 +189,6 @@ const domFuncs = (() => {
         array.push(doc2)
         array.push(doc3)
         return array
-    }
-    
-    function addListenToDivs(divs) {
-        for (let i = 0; i < divs.length; i++) {
-            divs[i].addEventListener("click", e => {
-                let index = e.srcElement.number
-                makeProjectSpace(index)
-            })
-        }
     }
 
     function confirmRename(e, protodonum, pronum, todonum, origpronum) {
@@ -245,53 +236,86 @@ const domFuncs = (() => {
         return form
     }
 
+    function todoInfoCreate(e) {
+        let todoinfo = document.querySelector("#todoinfo")
+        let protodonum = e.originalTarget.number
+        let pronum = e.originalTarget.parentElement.currentNumber
+        let todo = returnProjectTodo(pronum, protodonum)
+        let tododivs = returnTodoElements(todo)
+        let todonum = todo.todonum
+        let origpronum = todo.projectnum
+        
+        let renamebtn = document.createElement("button")
+        renamebtn.addEventListener("click", function() {
+            let mainarea = document.querySelector("#content")
+            mainarea.appendChild(makeRenameForm(protodonum, pronum, todonum, origpronum))
+        })
+        renamebtn.textContent = "rename"
+        tododivs.push(renamebtn)
+
+        let deletebtn = document.createElement("button")
+        deletebtn.addEventListener("click", function() {
+            deleteTodo(origpronum, protodonum, todonum)
+            todoSorter()
+            appendProjects()
+            let projects = document.querySelector("#projectsarea").children
+            projects[pronum].click()
+            todoinfo.innerHTML = ""
+            saveArrs()
+        })
+        deletebtn.textContent = "delete"
+        tododivs.push(deletebtn)
+
+        todoinfo.innerHTML = ""
+        for (let t = 0; t < tododivs.length; t++) {
+            todoinfo.appendChild(tododivs[t])
+        }
+    }
+
     function makeProjectSpace(index) {
         let projecttodosarea = document.querySelector("#todos")
         let compiledtodos = compileArray(index)
         projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
         if (index > 4) {
-            projecttodosarea.appendChild(addBtnToProject(index))
+            projecttodosarea.appendChild(addBtnsToProject(index))
         }
         for (let i = 0; i < compiledtodos.length; i++) {
             compiledtodos[i].addEventListener("click", e => {
-                let todoinfo = document.querySelector("#todoinfo")
-                let protodonum = e.originalTarget.number
-                let pronum = e.originalTarget.parentElement.currentNumber
-                let todo = returnProjectTodo(pronum, protodonum)
-                let todonum = todo.todonum
-                let tododivs = returnTodoElements(todo)
-                let origpronum = todo.projectnum
-                
-                let renamebtn = document.createElement("button")
-                renamebtn.addEventListener("click", function() {
-                    let mainarea = document.querySelector("#content")
-                    mainarea.appendChild(makeRenameForm(protodonum, pronum, todonum, origpronum))
-                })
-                renamebtn.textContent = "rename"
-                tododivs.push(renamebtn)
-
-                let deletebtn = document.createElement("button")
-                deletebtn.addEventListener("click", function() {
-                    deleteTodo(origpronum, protodonum, todonum)
-                    todoSorter()
-                    appendProjects()
-                    let projects = document.querySelector("#projectsarea").children
-                    projects[pronum].click()
-                    todoinfo.innerHTML = ""
-                    saveArrs()
-                })
-                deletebtn.textContent = "delete"
-                tododivs.push(deletebtn)
-
-                todoinfo.innerHTML = ""
-                for (let t = 0; t < tododivs.length; t++) {
-                    todoinfo.appendChild(tododivs[t])
-                }
+                todoInfoCreate(e)
             })
             projecttodosarea.appendChild(compiledtodos[i])
         }
-    
+    }
+
+    function addBtnsToProject(index) {
+        let buttonsdiv = document.createElement("div")
+        let addtodobtn = document.createElement("button")
+        addtodobtn.textContent = "Add To-Do to Project"
+        addtodobtn.addEventListener("click", () => {
+            formfuncs.appendForm(index)
+        })
+        buttonsdiv.appendChild(addtodobtn)
+
+        let deletebtn = document.createElement("button")
+        deletebtn.textContent = "Delete Project"
+        deletebtn.addEventListener("click", e => {
+            deleteProject(index)
+            todoSorter()
+            appendProjects()
+        })
+        buttonsdiv.appendChild(deletebtn)
+
+        return buttonsdiv
+    }
+
+    function addListenToDivs(divs) {
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].addEventListener("click", e => {
+                let index = e.srcElement.number
+                makeProjectSpace(index)
+            })
+        }
     }
     
     function appendProjects() {
