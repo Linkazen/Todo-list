@@ -2,19 +2,6 @@ import { format, add, isDate, formatDistanceStrict } from 'date-fns'
 
 let todos = []
 
-// btn for clearing out local storage for testing purposes
-let localprobtn = document.createElement("button")
-localprobtn.innerText = "clear local storage"
-localprobtn.addEventListener("click", function() {
-    localStorage.clear()
-})
-document.querySelector('#topdiv').appendChild(localprobtn)
-
-if (localStorage.getItem("todos") != null) {
-    todos = JSON.parse(localStorage.getItem("todos"))
-    todos.forEach(element => storeDateObjConv(element, false))
-}
-
 let projects = [
     projectConstructor("24 hours", "To-Dos that are due today.", undefined, undefined, undefined),
     projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined, undefined),
@@ -23,10 +10,23 @@ let projects = [
     projectConstructor("Misc", "Miscellaneous todos", undefined, undefined, undefined),
 ]
 
+if (localStorage.getItem("todos") != null) {
+    todos = JSON.parse(localStorage.getItem("todos"))
+    todos.forEach(element => storeDateObjConv(element, false))
+}
+
 if (localStorage.getItem("projects") != null) {
     projects = JSON.parse(localStorage.getItem("projects"))
     projects.forEach(element => storeDateObjConv(element, true))
 }
+
+// btn for clearing out local storage for testing purposes
+let localprobtn = document.createElement("button")
+localprobtn.innerText = "clear local storage"
+localprobtn.addEventListener("click", function() {
+    localStorage.clear()
+})
+document.querySelector('#topdiv').appendChild(localprobtn)
 
 function todoConstructor(title, desc, date, time, priority) {
     let datedue = ""
@@ -75,6 +75,31 @@ function renameTodo(newTitle, pronum, protodonum, todonum) {
     }
     console.log(todonum)
     todos[todonum].title = `${newTitle}`
+}
+
+function sortImportant() {
+    function compareTodo(firstEl, secondEl) {
+        return (firstEl.priority === secondEl.priority)? 0 : firstEl.priority? -1 : 1;
+    }
+    todos.sort(compareTodo)
+    todos.forEach((element, index) => {
+        element.todonum = index
+    })
+    for (let i = 0; i < projects.length; i++) {
+        if (projects < 5) {
+            continue
+        }
+        projects[i].todos = projects[i].todos.sort(compareTodo)
+    }
+
+    let npro = projects.slice(5)
+    projects = projects.splice(0, 5)
+
+    npro = npro.sort((first, sec) => {
+        return (first.priority === sec.priority)? 0 : first.priority? -1 : 1;
+    })
+
+    projects = projects.concat(npro)
 }
 
 function deleteTodo(pronum, protodonum, todonum) {
@@ -137,6 +162,7 @@ function makeTodo(projectstatus, form) {
         todoSorter()
     }
     saveArrs()
+    sortImportant()
 }
 
 function saveArrs() {
@@ -186,8 +212,7 @@ function deleteProject(num) {
     for (let i = indexes[0]; i < todos.length; i++) {
         todos[i].todonum = i
     }
-    
-    console.log(todos)
+
     projects.splice(num, 1)
 }
 

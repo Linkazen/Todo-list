@@ -303,6 +303,8 @@ const domFuncs = (() => {
             deleteProject(index)
             todoSorter()
             appendProjects()
+            let todosspace = document.querySelector("#todos")
+            todosspace.innerHTML = ""
         })
         buttonsdiv.appendChild(deletebtn)
 
