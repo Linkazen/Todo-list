@@ -73,7 +73,6 @@ function renameTodo(newTitle, pronum, protodonum, todonum) {
     if (pronum != undefined) {
         projects[pronum].todos[protodonum].title = `${newTitle}`
     }
-    console.log(todonum)
     todos[todonum].title = `${newTitle}`
 }
 
@@ -90,6 +89,9 @@ function sortImportant() {
             continue
         }
         projects[i].todos = projects[i].todos.sort(compareTodo)
+        projects[i].todos.forEach((element, index) => {
+            element.todonum = index
+        })
     }
 
     let npro = projects.slice(5)
@@ -100,6 +102,7 @@ function sortImportant() {
     })
 
     projects = projects.concat(npro)
+    saveArrs()
 }
 
 function deleteTodo(pronum, protodonum, todonum) {
@@ -113,6 +116,28 @@ function deleteTodo(pronum, protodonum, todonum) {
     for (let i = todonum; i < todos.length; i++) {
         todos[i].todonum -= 1
     }
+}
+
+function deleteProject(num) {
+    let projectTodos = projects[num].todos
+    let indexes = []
+    let minusAmount = 1
+
+    for (let i = 0; i < projectTodos.length; i++) {
+        indexes.push(projectTodos[i].todonum)
+    }
+
+    todos = todos.filter(element => {
+        return false == indexes.some(ele => {
+            return ele == element.todonum 
+        })
+    })
+    
+    for (let i = indexes[0]; i < todos.length; i++) {
+        todos[i].todonum = i
+    }
+
+    projects.splice(num, 1)
 }
 
 // goes through the todos in the array and sorts them to where they should be
@@ -145,6 +170,7 @@ function todoSorter() {
             projects[4].todos.push(todos[i])
         }
     }
+    saveArrs()
 }
 
 function makeTodo(projectstatus, form) {
@@ -161,8 +187,8 @@ function makeTodo(projectstatus, form) {
         todos.push(todo)
         todoSorter()
     }
-    saveArrs()
     sortImportant()
+    saveArrs()
 }
 
 function saveArrs() {
@@ -191,29 +217,6 @@ function compileArray(value) {
     }
 
     return compiledArray
-}
-
-
-function deleteProject(num) {
-    let projectTodos = projects[num].todos
-    let indexes = []
-    let minusAmount = 1
-
-    for (let i = 0; i < projectTodos.length; i++) {
-        indexes.push(projectTodos[i].todonum)
-    }
-
-    todos = todos.filter(element => {
-        return false == indexes.some(ele => {
-            return ele == element.todonum 
-        })
-    })
-    
-    for (let i = indexes[0]; i < todos.length; i++) {
-        todos[i].todonum = i
-    }
-
-    projects.splice(num, 1)
 }
 
 function returnProjectTodo(projectnum, todonum) {

@@ -304,7 +304,9 @@ const domFuncs = (() => {
             todoSorter()
             appendProjects()
             let todosspace = document.querySelector("#todos")
+            let todoinfo = document.querySelector("#todoinfo")
             todosspace.innerHTML = ""
+            todoinfo.innerHTML = ""
         })
         buttonsdiv.appendChild(deletebtn)
 
