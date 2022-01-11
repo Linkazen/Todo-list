@@ -26,15 +26,21 @@ html, body {
     display: flex;
     grid-area: topbar;
     border-bottom: 3px solid black;
+    background-image: linear-gradient(to bottom, red, rgb(148, 0, 0));
 }
 
 #projectsarea {
     grid-area: sidebar;
     border-right: 3px solid black;
+    overflow: auto;
+    background-color: rgb(185, 185, 185);
+    background-image: linear-gradient(to bottom, rgb(185, 185, 185), rgb(218, 216, 216));
 }
 
-#projecttodos {
+#projecttodosarea {
     grid-area: main;
+    background-color: khaki;
+    background-image: linear-gradient(to top, khaki, rgb(240, 225, 88))
 }
 
 #todoform {
