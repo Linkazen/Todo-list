@@ -57,6 +57,7 @@ html, body {
     margin: -15vw 0 0 -25vw;
     background: rgb(203, 255, 244);
     border: 3px solid black;
+    box-shadow: 5px 10px 10px rgb(99, 94, 48);
 }
 
 #todoform > * {
