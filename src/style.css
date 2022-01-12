@@ -46,6 +46,9 @@ html, body {
 
 #todoform {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     width: 50vw;
     height: 30vw;
     z-index: 1;
@@ -55,3 +58,20 @@ html, body {
     background: rgb(203, 255, 244);
     border: 3px solid black;
 }
+
+#todoform > * {
+    text-align: center;
+}
+
+#todoform > input[name=important] {
+    margin-bottom: auto;
+}
+
+#todoform > button {
+    margin: 15px 50px 15px 50px;
+    height: 5em;
+}
+
+/*p ~ input, p ~ label {
+
+}*/
