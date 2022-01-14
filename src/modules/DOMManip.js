@@ -268,6 +268,7 @@ const domFuncs = (() => {
             appendProjects()
             let projects = document.querySelector("#projectsarea").children
             projects[pronum].click()
+            console.log("hello")
             todoinfo.innerHTML = ""
             saveArrs()
         })
@@ -338,10 +339,13 @@ const domFuncs = (() => {
         let projectarr = compileArray("projects")
         let seperator = document.createElement("p")
         seperator.textContent = "Project Todos"
-        projectarr.splice(5, 0, seperator)
+        projectarr.push(seperator)
         projectsarea.innerHTML = ""
         addListenToDivs(projectarr)
         for (let i = 0; i < projectarr.length; i++) {
+            if (i > 4 && projectarr[i] != projectarr.slice(-1)[0]) {
+                projectarr[i].style.order = "2"
+            }
             projectsarea.appendChild(projectarr[i])
         }
     }
