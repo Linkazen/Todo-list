@@ -250,6 +250,8 @@ const domFuncs = (() => {
         let tododivs = returnTodoElements(todo)
         let todonum = todo.todonum
         let origpronum = todo.projectnum
+        let btndiv = document.createElement("div")
+        btndiv.className = "probtns"
         
         let renamebtn = document.createElement("button")
         renamebtn.addEventListener("click", function() {
@@ -257,7 +259,7 @@ const domFuncs = (() => {
             mainarea.appendChild(makeRenameForm(protodonum, pronum, todonum, origpronum))
         })
         renamebtn.textContent = "rename"
-        tododivs.push(renamebtn)
+        btndiv.appendChild(renamebtn)
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
@@ -270,7 +272,8 @@ const domFuncs = (() => {
             saveArrs()
         })
         deletebtn.textContent = "delete"
-        tododivs.push(deletebtn)
+        btndiv.appendChild(deletebtn)
+        tododivs.push(btndiv)
 
         todoinfo.innerHTML = ""
         for (let t = 0; t < tododivs.length; t++) {
@@ -296,6 +299,8 @@ const domFuncs = (() => {
 
     function addBtnsToProject(index) {
         let buttonsdiv = document.createElement("div")
+        buttonsdiv.className = "probtns"
+
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
