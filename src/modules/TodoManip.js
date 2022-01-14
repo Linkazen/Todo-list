@@ -21,14 +21,14 @@ if (localStorage.getItem("projects") != null) {
 }
 
 // btn for clearing out local storage for testing purposes
-/*
+
 let localprobtn = document.createElement("button")
 localprobtn.innerText = "clear local storage"
 localprobtn.addEventListener("click", function() {
     localStorage.clear()
 })
 document.querySelector('#topdiv').appendChild(localprobtn)
-*/
+
 
 function todoConstructor(title, desc, date, time, priority) {
     let datedue = ""

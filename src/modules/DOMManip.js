@@ -43,12 +43,12 @@ const formfuncs = (() => {
         ]
 
         let textlabels = [
-            "Enter The Name", 
-            "To-Do Description", 
+            "Enter The Name:", 
+            "To-Do Description:", 
             "Whenever", 
             "Specific date", 
-            "Pick a date",
-            "Pick a time",
+            "Pick a date:",
+            "Pick a time:",
             "Important?",
             "Close",
             "Create"
@@ -85,19 +85,17 @@ const formfuncs = (() => {
                         let elementlabel = e.originalTarget.label
                         radioChange(elementlabel)
                     })
-                    formshell.appendChild(tempinput)
+                    templabel.appendChild(tempinput)
                     formshell.appendChild(templabel)
                 } else if(i == 4 || i == 5) {
-                    tempinput.className = "datetime"
-                    templabel.className = "datetime"
                     tempinput.min = format(new Date(), "yyyy-MM-dd")
-                    tempinput.style.display = "none"
+                    templabel.className = "datetime"
                     templabel.style.display = "none"
+                    templabel.appendChild(tempinput)
                     formshell.appendChild(templabel)
-                    formshell.appendChild(tempinput)
                 } else {  
+                    templabel.appendChild(tempinput)
                     formshell.appendChild(templabel)
-                    formshell.appendChild(tempinput)
                 }
 
             } else {
@@ -114,11 +112,11 @@ const formfuncs = (() => {
     function radioChange(elementlabel) {
         let allElements = document.querySelectorAll(".datetime")
         if (elementlabel == "Whenever") {
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < allElements.length; i++) {
                 allElements[i].style.display = "none"
             }
         } else {
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < allElements.length; i++) {
                 allElements[i].style.display = "block"
             }
         }
