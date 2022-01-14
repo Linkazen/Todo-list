@@ -221,13 +221,6 @@ const domFuncs = (() => {
         text.type = "text"
         text.name = "rename"
         
-        let cnclbtn = document.createElement("button")
-        cnclbtn.textContent = "cancel"
-        cnclbtn.type = "button"
-        cnclbtn.addEventListener("click", function(e) {
-            destroyForm(e)
-        })
-
         let confbtn = document.createElement("button")
         confbtn.textContent = "confirm"
         confbtn.type = "button"
@@ -235,10 +228,17 @@ const domFuncs = (() => {
             confirmRename(e, protodonum, pronum, todonum, origpronum)
         })
 
+        let cnclbtn = document.createElement("button")
+        cnclbtn.textContent = "cancel"
+        cnclbtn.type = "button"
+        cnclbtn.addEventListener("click", function(e) {
+            destroyForm(e)
+        })
+        
         label.appendChild(text)
         form.appendChild(label)
-        form.appendChild(cnclbtn)
         form.appendChild(confbtn)
+        form.appendChild(cnclbtn)
         return form
     }
 
@@ -331,6 +331,9 @@ const domFuncs = (() => {
     function appendProjects() {
         let projectsarea = document.querySelector("#projectsarea")
         let projectarr = compileArray("projects")
+        let seperator = document.createElement("p")
+        seperator.textContent = "Project Todos"
+        projectarr.splice(5, 0, seperator)
         projectsarea.innerHTML = ""
         addListenToDivs(projectarr)
         for (let i = 0; i < projectarr.length; i++) {

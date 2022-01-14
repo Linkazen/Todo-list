@@ -32,6 +32,8 @@ html, body {
 
 #projectsarea {
     grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
     border-right: 3px solid black;
     overflow: auto;
     background-color: rgb(185, 185, 185);
@@ -39,9 +41,23 @@ html, body {
 }
 
 #projecttodosarea {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: 
+        "todos todoinfo todoinfo"
+    ;
     grid-area: main;
     background-color: khaki;
     background-image: linear-gradient(to top, khaki, rgb(240, 225, 88))
+}
+
+#todos {
+    grid-area: todos;
+    
+}
+
+#todoinfo {
+    grid-area: todoinfo;
 }
 
 #renameform {
@@ -61,11 +77,6 @@ html, body {
 
 #renameform > label {
     margin: 10px 20px auto 20px;
-}
-
-#renameform > button {
-    height: 5em;
-    margin: 10px 25px 10px 25px;
 }
 
 #todoform {
@@ -100,7 +111,25 @@ label > textarea {
     margin-bottom: auto;
 }
 
-#todoform > button {
+#todoform > button, #renameform > button {
     height: 5em;
     margin: 10px 25px 10px 25px;
+    box-shadow: 0 0 8px;
+    border-radius: 25px;
+    border: 0;
+}
+
+#projectsarea > p {
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+    margin: 0;
+    text-align: center;
+}
+
+#projectsarea > div {
+    padding: 5px 3px 3px 5px;
+}
+
+#projectsarea > div:hover {
+    background-color: rgb(89, 110, 106);
 }
