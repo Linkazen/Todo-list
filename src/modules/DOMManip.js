@@ -50,8 +50,8 @@ const formfuncs = (() => {
             "Pick a date:",
             "Pick a time:",
             "Important?",
-            "Close",
-            "Create"
+            "Create",
+            "Close"
         ]
 
         if (projectstatus === true) {
@@ -63,10 +63,15 @@ const formfuncs = (() => {
             if(i < (types.length - 2)) {
                 let tempinput = document.createElement("input")
                 let templabel = document.createElement("label")
+                if (i == 1) {
+                    tempinput = document.createElement("textarea")
+                }
                 tempinput.name = names[i]
                 templabel.for = names[i]
                 templabel.textContent = textlabels[i]
-                tempinput.type = types[i]
+                if (i != 1) {
+                    tempinput.type = types[i]
+                }
 
                 if(i == 2) {
                     let paragraph = document.createElement("p")
@@ -88,7 +93,9 @@ const formfuncs = (() => {
                     templabel.appendChild(tempinput)
                     formshell.appendChild(templabel)
                 } else if(i == 4 || i == 5) {
-                    tempinput.min = format(new Date(), "yyyy-MM-dd")
+                    if (i == 4) {
+                        tempinput.min = format(new Date(), "yyyy-MM-dd")
+                    }
                     templabel.className = "datetime"
                     templabel.style.display = "none"
                     templabel.appendChild(tempinput)
@@ -138,10 +145,10 @@ const formfuncs = (() => {
     }
 
     function addFormBtnListeners(form, projectstatus) {
-        form[form.length - 2].addEventListener("click", e => {
+        form[form.length - 1].addEventListener("click", e => {
             destroyForm(e)
         })
-        form[form.length - 1].addEventListener("click", e => {
+        form[form.length - 2].addEventListener("click", e => {
             if (form[0].value == "") {
                 return
             }
@@ -178,7 +185,7 @@ const domFuncs = (() => {
         doc1.textContent = `${todo.title}`
         doc2.textContent = `${todo.desc}`
         try {
-            doc3.textContent = `${format(todo.datedue, "yyyy/MM/dd hh:mm")}`
+            doc3.textContent = `${format(todo.datedue, "yyyy/MM/dd HH:mm")}`
         }
         catch {
             doc3.textContent = `Whenever`
@@ -204,6 +211,7 @@ const domFuncs = (() => {
 
     function makeRenameForm(protodonum, pronum, todonum, origpronum) {
         let form = document.createElement("form")
+        form.id = "renameform"
 
         let label = document.createElement("label")
         label.textContent = "Rename Todo?"
@@ -227,8 +235,8 @@ const domFuncs = (() => {
             confirmRename(e, protodonum, pronum, todonum, origpronum)
         })
 
+        label.appendChild(text)
         form.appendChild(label)
-        form.appendChild(text)
         form.appendChild(cnclbtn)
         form.appendChild(confbtn)
         return form

@@ -44,11 +44,34 @@ html, body {
     background-image: linear-gradient(to top, khaki, rgb(240, 225, 88))
 }
 
+#renameform {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 300px;
+    margin: -150px 0 0 -150px;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(203, 255, 244);
+    border: 3px solid black;
+    box-shadow: 5px 10px 10px rgb(99, 94, 48);
+}
+
+#renameform > label {
+    margin: 10px 20px auto 20px;
+}
+
+#renameform > button {
+    height: 5em;
+    margin: 10px 25px 10px 25px;
+}
+
 #todoform {
     position: absolute;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     width: 50vw;
     height: 30vw;
     z-index: 1;
@@ -64,14 +87,20 @@ html, body {
     text-align: center;
 }
 
+label > textarea {
+    max-height: 148px;
+    max-width: 784px;
+}
+
+#todoform > label {
+    margin: 10px 0px 10px 0px;
+}
+
 #todoform > label:last-of-type {
     margin-bottom: auto;
 }
 
 #todoform > button {
     height: 5em;
+    margin: 10px 25px 10px 25px;
 }
-
-/*p ~ input, p ~ label {
-
-}*/
