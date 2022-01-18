@@ -1,27 +1,33 @@
-import { format, add, isDate, formatDistanceStrict } from 'date-fns'
+import { format, add, isDate, formatDistanceStrict, isThisSecond } from 'date-fns'
+import {todoCon, projectCon} from './Constructors'
 
 let todos = []
 
-let projects = [
-    projectConstructor("24 hours", "To-Dos that are due today.", undefined, undefined, undefined),
-    projectConstructor("7 Days", "To-Dos that are due in 7 days.", undefined, undefined, undefined),
-    projectConstructor("29 Days", "To-Dos that are due in 30 days.", undefined, undefined, undefined),
-    projectConstructor("29+ Days", "To-Dos that are due after 30 days.", undefined, undefined, undefined),
-    projectConstructor("Misc", "Miscellaneous todos", undefined, undefined, undefined),
-]
+let projects = []
 
-if (localStorage.getItem("todos") != null) {
+// puts the 5 base projects into the project array
+let titles = [
+    "Today",
+    "7 Days",
+    "29 Days",
+    "29+ Days",
+    "Misc"
+]
+for (let i = 0; i < 5; i++) {
+    projects.push(createProject(titles[i], ""))
+}
+console.log(projects)
+
+/*if (localStorage.getItem("todos") != null) {
     todos = JSON.parse(localStorage.getItem("todos"))
     todos.forEach(element => storeDateObjConv(element, false))
 }
 
 if (localStorage.getItem("projects") != null) {
     projects = JSON.parse(localStorage.getItem("projects"))
-    projects.forEach(element => storeDateObjConv(element, true))
 }
 
-// btn for clearing out local storage for testing purposes
-
+btn for clearing out local storage for testing purposes
 let localprobtn = document.createElement("button")
 localprobtn.innerText = "clear local storage"
 localprobtn.addEventListener("click", function() {
@@ -29,167 +35,143 @@ localprobtn.addEventListener("click", function() {
 })
 document.querySelector('#topdiv').appendChild(localprobtn)
 
-
-function todoConstructor(title, desc, date, time, priority) {
-    let datedue = ""
-    if (date === "" && time === "") {
-        datedue = "whenever"
-    } else if (time === "") {
-        datedue = new Date(Date.parse(`${date} 00:00`))
-    } else if (date === "") {
-        datedue = new Date(Date.parse(`${format(new Date(), "yyyy/MM/dd")} ${time}`))
-    } else {
-        datedue = new Date(Date.parse(`${date} ${time}`))
-    }
-    let todonum = todos.length
-    let projectnum = undefined
-    return {title, desc, datedue, priority, todonum, projectnum}
-}
-
-function projectConstructor(title, desc, date, time, priority) {
-    let datedue = ""
-    if (date === "" && time === "") {
-        datedue = "whenever"
-    } else if (time === "") {
-        datedue = new Date(Date.parse(`${date} 00:00`))
-    } else if (date === "") {
-        datedue = new Date(Date.parse(`${format(new Date(), "yyyy/MM/dd")} ${time}`))
-    } else {
-        datedue = new Date(Date.parse(`${date} ${time}`))
-    }
-    let todos = []
-    return {title, desc, datedue, priority, todos}
-}
-
 // converts the local storage dates from strings to date objects
 function storeDateObjConv(obj, proTrue) {
-    if (obj.datedue != undefined || obj.datedue != "whenever") {
-        obj.datedue = new Date(Date.parse(obj.datedue))
+    let datedue = obj.getDatedue()
+    if (datedue != undefined || datedue != "whenever") {
+        obj.setDatedue(new Date(Date.parse(obj.datedue)))
     }
-    if (proTrue === true) {
-        obj.todos.forEach(element => storeDateObjConv(element, false))
-    }
+}*/
+
+function renameTodo(todonum, name) {
+    todos[todonum].setTitle(name)
 }
 
-function renameTodo(newTitle, pronum, protodonum, todonum) {
-    if (pronum != undefined) {
-        projects[pronum].todos[protodonum].title = `${newTitle}`
-    }
-    todos[todonum].title = `${newTitle}`
-}
-
-function sortImportant() {
-    function compareTodo(firstEl, secondEl) {
-        return (firstEl.priority === secondEl.priority)? 0 : firstEl.priority? -1 : 1;
-    }
-    todos.sort(compareTodo)
-    todos.forEach((element, index) => {
-        element.todonum = index
-    })
-    for (let i = 0; i < projects.length; i++) {
-        if (projects < 5) {
-            continue
-        }
-        projects[i].todos = projects[i].todos.sort(compareTodo)
-        projects[i].todos.forEach((element, index) => {
-            element.todonum = index
-        })
-    }
-
-    let npro = projects.slice(5)
-    projects = projects.splice(0, 5)
-
-    npro = npro.sort((first, sec) => {
-        return (first.priority === sec.priority)? 0 : first.priority? -1 : 1;
-    })
-
-    projects = projects.concat(npro)
-    saveArrs()
-}
-
-function deleteTodo(pronum, protodonum, todonum) {
+function deleteTodo(todonum) {
     todos.splice(todonum, 1)
-    if (pronum != undefined) {
-        projects[pronum].todos.splice(protodonum, 1)
-        for (let i = protodonum; i < projects[pronum].todos.length; i++) {
-            projects[pronum].todos[i].todonum -= 1
-        }
-    }
-    for (let i = todonum; i < todos.length; i++) {
-        todos[i].todonum -= 1
-    }
 }
 
 function deleteProject(num) {
-    let projectTodos = projects[num].todos
-    let indexes = []
-    let minusAmount = 1
+    /*
+    let protodos = []
+    let minusby = 0
 
-    for (let i = 0; i < projectTodos.length; i++) {
-        indexes.push(projectTodos[i].todonum)
+    for (let i = 0; i < projects.length; i++) {
+        protodos.push(projects[i].getTodos())
     }
-
-    todos = todos.filter(element => {
-        return false == indexes.some(ele => {
-            return ele == element.todonum 
-        })
-    })
     
-    for (let i = indexes[0]; i < todos.length; i++) {
-        todos[i].todonum = i
+    let todostodel = protodos[num]
+    todostodel.sort((first, second) => {
+        if (first < second) {
+            return 1
+        } else if(first > second) {
+            return -1
+        } else {
+            return 0
+        }
+    })
+
+    function changeprojectnums(elementnum, numtocheck, todosdeletearr) {
+        if (elementnum = numtocheck) {
+            todos.splice(elementnum, 1)
+        } else if (elementnum > numtocheck) {
+            elementnum -= 1
+        }
+
+        if (todosdeletearr[i])
+        return elementnum
     }
+
+    for (let i = 0; i < todostodel; i++) {
+        let numtocheck = todostodel[i]
+        let copytodos = []
+        protodos.forEach(element => {
+            let temptodostorage = []
+            element.forEach(element => {
+                temptodostorage.push(changeprojectnums(element, numtocheck))
+            })
+            copytodos.push(temptodostorage)
+        })
+        protodos = copytodos
+    }
+
+    problem: projects wont get sliced
+
+    for (let i = 0; i < 0; i++) {
+        projects[i].setTodoList(copytodos[i])
+    }
+
+    copytodos.forEach(element => {
+        element.setTodoList(copytodos[])
+    })
 
     projects.splice(num, 1)
+    
+    possibly not even needed as the object might have a link
+    to the original when placed in the projects todos
+    ::need further testing 
+    */
 }
 
 // goes through the todos in the array and sorts them to where they should be
 function todoSorter() {
     for (let i = 0; i < 5; i++) {
-        projects[i].todos = []
+        projects[i].emptyTodos()
     }
     for (let i = 0; i < todos.length; i++) {
-        let timeUntilDueArr = []
         try {
-            timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].datedue).split(" ")
+            let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].getDatedue()).split(" ")
             switch (timeUntilDueArr[1]) {
                 case "seconds":
                 case "minutes":
                 case "hours":
-                    projects[0].todos.push(todos[i])
+                    projects[i].addTodo(i)
                     break;
                 case "days":
                     if (parseInt(timeUntilDueArr[0]) <= 7) {
-                        projects[1].todos.push(todos[i])
+                        projects[1].addTodo(i)
                     } else {
-                        projects[2].todos.push(todos[i])
+                        projects[2].addTodo(i)
                     }
                     break;
                 default:
-                    projects[3].todos.push(todos[i])
+                    projects[3].addTodo(i)
             }
         }
         catch {
-            projects[4].todos.push(todos[i])
+            projects[4].addTodo(i)
         }
     }
     saveArrs()
 }
 
+function createTodo(title, desc, date, time, priority) {
+    let newTodo = todoCon()
+    newTodo.quickMake(title, desc, date, time, priority)
+    return newTodo
+}
+
+function createProject(title, desc) {
+    let newProject = projectCon()
+    newProject.quickMake(title, desc)
+    return newProject
+}
+
 function makeTodo(projectstatus, form) {
     if(projectstatus === true) {
-        projects.push(projectConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+        projects.push(createProject(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
         todoSorter()
     } else if (projectstatus === false) {
-        todos.push(todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+        console.log("elo")
+        todos.push(createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
         todoSorter()
     } else {
-        let todo = todoConstructor(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
-        todo.projectnum = projectstatus
-        projects[projectstatus].todos.push(todo)
+        let todo = createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
+        projects[projectstatus].addTodo(todos[-1])
         todos.push(todo)
         todoSorter()
     }
-    sortImportant()
+    // sortImportant()
     saveArrs()
 }
 
@@ -198,6 +180,8 @@ function saveArrs() {
     localStorage.setItem("projects", JSON.stringify(projects))
 }
 
+console.log(projects)
+
 // compiles all elements in an array into a div    
 function compileArray(value) {
     let arr = undefined
@@ -205,34 +189,30 @@ function compileArray(value) {
     if (value == "projects") {
         arr = projects 
     } else {
-        arr = projects[value].todos
+        arr = projects[value].getTodos()
     }
-
+    console.log(projects)
     for (let i = 0; i < arr.length; i++) {
-        let element = document.createElement("div")
-        element.textContent = arr[i].title
-        element.number = i
-        if (value != "projects") {
-            element.todoNum = arr[i].todonum
-        }
-        compiledArray.push(element)
+        let div = document.createElement("div")
+        div.textContent = `${arr[i].getTitle()}`
+        div.number = todos.indexOf(arr[i])
+        compiledArray.push(div)
     }
-
+    console.log()
     return compiledArray
 }
 
-function returnProjectTodo(projectnum, todonum) {
-    let todo = projects[projectnum].todos[todonum]
-    return todo
+function returnProjectTodo(todonum) {
+    return todos[todonum]
 }
 
 export {
     makeTodo, 
     compileArray, 
-    returnProjectTodo, 
     renameTodo, 
-    deleteTodo, 
-    todoSorter, 
+    deleteTodo,  
     saveArrs, 
-    deleteProject
+    deleteProject,
+    todoSorter,
+    returnProjectTodo
 }

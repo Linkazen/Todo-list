@@ -2,13 +2,14 @@ import {format} from 'date-fns'
 import { 
     makeTodo, 
     compileArray, 
-    returnProjectTodo, 
     renameTodo, 
     deleteTodo, 
     todoSorter, 
     saveArrs, 
-    deleteProject 
+    deleteProject,
+    returnProjectTodo
 } from './TodoManip'
+import {todoCon, projectCon} from './Constructors'
 
 function destroyForm(e) {
     e.srcElement.parentNode.remove()
@@ -182,10 +183,10 @@ const domFuncs = (() => {
         let doc1 = document.createElement("h1")
         let doc2 = document.createElement("p")
         let doc3 = document.createElement("p")
-        doc1.textContent = `${todo.title}`
-        doc2.textContent = `${todo.desc}`
+        doc1.textContent = `${todo.getTodo()}`
+        doc2.textContent = `${todo.getDesc()}`
         try {
-            doc3.textContent = `${format(todo.datedue, "yyyy/MM/dd HH:mm")}`
+            doc3.textContent = `${format(todo.getDatedue(), "yyyy/MM/dd HH:mm")}`
         }
         catch {
             doc3.textContent = `Whenever`
@@ -198,12 +199,10 @@ const domFuncs = (() => {
 
     function confirmRename(e, protodonum, pronum, todonum, origpronum) {
         let newName = e.originalTarget.parentElement[0].value
-        renameTodo(newName, origpronum, protodonum, todonum)
-        console.log("hello")
+        renameTodo(todonum, newName)
         todoSorter()
         appendProjects()
         let projects = document.querySelector("#projectsarea").children
-        console.log(pronum)
         projects[pronum].click()
         todoinfo.innerHTML = ""
         saveArrs()
@@ -246,7 +245,7 @@ const domFuncs = (() => {
         let todoinfo = document.querySelector("#todoinfo")
         let protodonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
-        let todo = returnProjectTodo(pronum, protodonum)
+        let todo = returnProjectTodo(protodonum)
         let tododivs = returnTodoElements(todo)
         let todonum = todo.todonum
         let origpronum = todo.projectnum
@@ -263,12 +262,12 @@ const domFuncs = (() => {
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
+            console.log(origpronum)
             deleteTodo(origpronum, protodonum, todonum)
             todoSorter()
             appendProjects()
             let projects = document.querySelector("#projectsarea").children
             projects[pronum].click()
-            console.log("hello")
             todoinfo.innerHTML = ""
             saveArrs()
         })
@@ -299,15 +298,15 @@ const domFuncs = (() => {
     }
 
     function addBtnsToProject(index) {
-        let buttonsdiv = document.createElement("div")
-        buttonsdiv.className = "probtns"
+        let buttonsspan = document.createElement("span")
+        buttonsspan.className = "probtns"
 
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
             formfuncs.appendForm(index)
         })
-        buttonsdiv.appendChild(addtodobtn)
+        buttonsspan.appendChild(addtodobtn)
 
         let deletebtn = document.createElement("button")
         deletebtn.textContent = "Delete Project"
@@ -320,15 +319,15 @@ const domFuncs = (() => {
             todosspace.innerHTML = ""
             todoinfo.innerHTML = ""
         })
-        buttonsdiv.appendChild(deletebtn)
+        buttonsspan.appendChild(deletebtn)
 
-        return buttonsdiv
+        return buttonsspan
     }
 
     function addListenToDivs(divs) {
         for (let i = 0; i < divs.length; i++) {
             divs[i].addEventListener("click", e => {
-                let index = e.srcElement.number
+                let index = divs[i].number
                 makeProjectSpace(index)
             })
         }
@@ -343,7 +342,7 @@ const domFuncs = (() => {
         projectsarea.innerHTML = ""
         addListenToDivs(projectarr)
         for (let i = 0; i < projectarr.length; i++) {
-            if (i > 4 && projectarr[i] != projectarr.slice(-1)[0]) {
+            if (i > 4 && projectarr[i] != projectarr[-1]) {
                 projectarr[i].style.order = "2"
             }
             projectsarea.appendChild(projectarr[i])
