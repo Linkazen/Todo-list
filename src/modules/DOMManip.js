@@ -262,7 +262,7 @@ const domFuncs = (() => {
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
-            deleteTodo(origpronum, protodonum, todonum)
+            deleteTodo(origpronum)
             todoSorter()
             appendProjects()
             let projects = document.querySelector("#projectsarea").children
@@ -296,21 +296,21 @@ const domFuncs = (() => {
         }
     }
 
-    function addBtnsToProject(index) {
+    function addBtnsToProject(projectNum) {
         let buttonsspan = document.createElement("span")
         buttonsspan.className = "probtns"
 
         let addtodobtn = document.createElement("button")
         addtodobtn.textContent = "Add To-Do to Project"
         addtodobtn.addEventListener("click", () => {
-            formfuncs.appendForm(index)
+            formfuncs.appendForm(projectNum)
         })
         buttonsspan.appendChild(addtodobtn)
 
         let deletebtn = document.createElement("button")
         deletebtn.textContent = "Delete Project"
         deletebtn.addEventListener("click", e => {
-            deleteProject(index)
+            deleteProject(projectNum)
             todoSorter()
             appendProjects()
             let todosspace = document.querySelector("#todos")
@@ -341,7 +341,7 @@ const domFuncs = (() => {
         projectsarea.innerHTML = ""
         addListenToDivs(projectarr)
         for (let i = 0; i < projectarr.length; i++) {
-            if (i > 4 && projectarr[i] != projectarr[-1]) {
+            if (i > 4 && projectarr[i] != projectarr.at(-1)) {
                 projectarr[i].style.order = "2"
             }
             projectsarea.appendChild(projectarr[i])

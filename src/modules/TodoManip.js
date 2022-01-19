@@ -1,5 +1,6 @@
 import { format, add, isDate, formatDistanceStrict, isThisSecond } from 'date-fns'
 import {todoCon, projectCon} from './Constructors'
+var _ = require('lodash')
 
 let todos = []
 
@@ -50,66 +51,14 @@ function deleteTodo(todonum) {
     todos.splice(todonum, 1)
 }
 
-function deleteProject(num) {
-    /*
-    let protodos = []
-    let minusby = 0
-
-    for (let i = 0; i < projects.length; i++) {
-        protodos.push(projects[i].getTodos())
-    }
+function deleteProject(pronum) {
+    let projTodos = projects[pronum].getTodos()
     
-    let todostodel = protodos[num]
-    todostodel.sort((first, second) => {
-        if (first < second) {
-            return 1
-        } else if(first > second) {
-            return -1
-        } else {
-            return 0
-        }
-    })
-
-    function changeprojectnums(elementnum, numtocheck, todosdeletearr) {
-        if (elementnum = numtocheck) {
-            todos.splice(elementnum, 1)
-        } else if (elementnum > numtocheck) {
-            elementnum -= 1
-        }
-
-        if (todosdeletearr[i])
-        return elementnum
+    for (let i = 0; i < projTodos.length; i++) {
+        todos.splice(myIndexOf(todos, projTodos[i]), 1)
     }
 
-    for (let i = 0; i < todostodel; i++) {
-        let numtocheck = todostodel[i]
-        let copytodos = []
-        protodos.forEach(element => {
-            let temptodostorage = []
-            element.forEach(element => {
-                temptodostorage.push(changeprojectnums(element, numtocheck))
-            })
-            copytodos.push(temptodostorage)
-        })
-        protodos = copytodos
-    }
-
-    problem: projects wont get sliced
-
-    for (let i = 0; i < 0; i++) {
-        projects[i].setTodoList(copytodos[i])
-    }
-
-    copytodos.forEach(element => {
-        element.setTodoList(copytodos[])
-    })
-
-    projects.splice(num, 1)
-    
-    possibly not even needed as the object might have a link
-    to the original when placed in the projects todos
-    ::need further testing 
-    */
+    projects.splice([pronum], 1)
 }
 
 // goes through the todos in the array and sorts them to where they should be
@@ -167,10 +116,13 @@ function makeTodo(projectstatus, form) {
     } else {
         let todo = createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
         todos.push(todo)
-        projects[projectstatus].addTodo(todos[-1])
+        
+        projects[projectstatus].addTodo(todos.at(-1))
+        
         todoSorter()
     }
     // sortImportant()
+    
     saveArrs()
 }
 
@@ -179,17 +131,15 @@ function saveArrs() {
     localStorage.setItem("projects", JSON.stringify(projects))
 }
 
-
+function myIndexOf(array, item) {
+    for (var i = 0; i < array.length; i++) {
+        if (_.isEqual(array[i], item)) return i;
+    }
+    return -1;
+}
 
 // compiles all elements in an array into a div    
 function compileArray(value) {
-
-    function myIndexOf(array, item) {
-        for (var i = 0; i < array.length; i++) {
-            if (array[i].toString() === item.toString()) return i;
-        }
-        return -1;
-    }
 
     let arr = undefined
     let compiledArray = []
@@ -208,6 +158,7 @@ function compileArray(value) {
             div.number = i
         } else {
             div.number = myIndexOf(todos, arr[i])
+
         }
         compiledArray.push(div)
     }
