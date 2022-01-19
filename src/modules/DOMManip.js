@@ -262,7 +262,6 @@ const domFuncs = (() => {
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
-            console.log(origpronum)
             deleteTodo(origpronum, protodonum, todonum)
             todoSorter()
             appendProjects()
@@ -325,7 +324,7 @@ const domFuncs = (() => {
     }
 
     function addListenToDivs(divs) {
-        for (let i = 0; i < divs.length; i++) {
+        for (let i = 0; i < divs.length - 1; i++) {
             divs[i].addEventListener("click", e => {
                 let index = divs[i].number
                 makeProjectSpace(index)

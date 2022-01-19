@@ -16,7 +16,6 @@ let titles = [
 for (let i = 0; i < 5; i++) {
     projects.push(createProject(titles[i], ""))
 }
-console.log(projects)
 
 /*if (localStorage.getItem("todos") != null) {
     todos = JSON.parse(localStorage.getItem("todos"))
@@ -121,27 +120,29 @@ function todoSorter() {
     for (let i = 0; i < todos.length; i++) {
         try {
             let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].getDatedue()).split(" ")
+            console.log(timeUntilDueArr)
             switch (timeUntilDueArr[1]) {
                 case "seconds":
                 case "minutes":
                 case "hours":
-                    projects[i].addTodo(i)
+                    projects[0].addTodo(todos[i])
                     break;
                 case "days":
                     if (parseInt(timeUntilDueArr[0]) <= 7) {
-                        projects[1].addTodo(i)
+                        projects[1].addTodo(todos[i])
                     } else {
-                        projects[2].addTodo(i)
+                        projects[2].addTodo(todos[i])
                     }
                     break;
                 default:
-                    projects[3].addTodo(i)
+                    projects[3].addTodo(todos[i])
             }
         }
         catch {
-            projects[4].addTodo(i)
+            projects[4].addTodo(todos[i])
         }
     }
+    console.log(projects)
     saveArrs()
 }
 
@@ -162,13 +163,13 @@ function makeTodo(projectstatus, form) {
         projects.push(createProject(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
         todoSorter()
     } else if (projectstatus === false) {
-        console.log("elo")
+        
         todos.push(createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
         todoSorter()
     } else {
         let todo = createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
-        projects[projectstatus].addTodo(todos[-1])
         todos.push(todo)
+        projects[projectstatus].addTodo(todos[-1])
         todoSorter()
     }
     // sortImportant()
@@ -180,25 +181,39 @@ function saveArrs() {
     localStorage.setItem("projects", JSON.stringify(projects))
 }
 
-console.log(projects)
+
 
 // compiles all elements in an array into a div    
 function compileArray(value) {
+
+    function myIndexOf(array, item) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].toString() === item.toString()) return i;
+        }
+        return -1;
+    }
+
     let arr = undefined
     let compiledArray = []
+
     if (value == "projects") {
         arr = projects 
     } else {
         arr = projects[value].getTodos()
+
     }
-    console.log(projects)
+
     for (let i = 0; i < arr.length; i++) {
         let div = document.createElement("div")
         div.textContent = `${arr[i].getTitle()}`
-        div.number = todos.indexOf(arr[i])
+        if (value == "projects") {
+            div.number = i
+        } else {
+            div.number = myIndexOf(todos, arr[i])
+        }
         compiledArray.push(div)
     }
-    console.log()
+
     return compiledArray
 }
 
