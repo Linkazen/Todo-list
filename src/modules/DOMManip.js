@@ -197,7 +197,7 @@ const domFuncs = (() => {
         return array
     }
 
-    function confirmRename(e, protodonum, pronum, todonum, origpronum) {
+    function confirmRename(e, todonum) {
         let newName = e.originalTarget.parentElement[0].value
         renameTodo(todonum, newName)
         todoSorter()
@@ -208,7 +208,7 @@ const domFuncs = (() => {
         saveArrs()
     }
 
-    function makeRenameForm(protodonum, pronum, todonum, origpronum) {
+    function makeRenameForm(protodonum) {
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -224,7 +224,7 @@ const domFuncs = (() => {
         confbtn.textContent = "confirm"
         confbtn.type = "button"
         confbtn.addEventListener("click", function(e) {
-            confirmRename(e, protodonum, pronum, todonum, origpronum)
+            confirmRename(e, protodonum)
         })
 
         let cnclbtn = document.createElement("button")
@@ -247,15 +247,13 @@ const domFuncs = (() => {
         let pronum = e.originalTarget.parentElement.currentNumber
         let todo = returnProjectTodo(protodonum)
         let tododivs = returnTodoElements(todo)
-        let todonum = todo.todonum
-        let origpronum = todo.projectnum
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
         
         let renamebtn = document.createElement("button")
         renamebtn.addEventListener("click", function() {
             let mainarea = document.querySelector("#content")
-            mainarea.appendChild(makeRenameForm(protodonum, pronum, todonum, origpronum))
+            mainarea.appendChild(makeRenameForm(protodonum))
         })
         renamebtn.textContent = "rename"
         btndiv.appendChild(renamebtn)
