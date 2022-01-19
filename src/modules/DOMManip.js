@@ -183,7 +183,7 @@ const domFuncs = (() => {
         let doc1 = document.createElement("h1")
         let doc2 = document.createElement("p")
         let doc3 = document.createElement("p")
-        doc1.textContent = `${todo.getTodo()}`
+        doc1.textContent = `${todo.getTitle()}`
         doc2.textContent = `${todo.getDesc()}`
         try {
             doc3.textContent = `${format(todo.getDatedue(), "yyyy/MM/dd HH:mm")}`

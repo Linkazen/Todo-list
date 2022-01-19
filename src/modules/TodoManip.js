@@ -120,7 +120,6 @@ function todoSorter() {
     for (let i = 0; i < todos.length; i++) {
         try {
             let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].getDatedue()).split(" ")
-            console.log(timeUntilDueArr)
             switch (timeUntilDueArr[1]) {
                 case "seconds":
                 case "minutes":
@@ -142,7 +141,6 @@ function todoSorter() {
             projects[4].addTodo(todos[i])
         }
     }
-    console.log(projects)
     saveArrs()
 }
 
