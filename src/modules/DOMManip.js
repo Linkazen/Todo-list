@@ -205,7 +205,6 @@ const domFuncs = (() => {
         appendProjects()
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
-        todoinfo.innerHTML = ""
         let todoSpace = document.querySelector("#todos").children
         todoSpace[divNum].click()
         saveArrs()
@@ -228,6 +227,7 @@ const domFuncs = (() => {
         confbtn.type = "button"
         confbtn.addEventListener("click", function(e) {
             confirmRename(e, todonum, pronum)
+            destroyForm(e)
         })
 
         let cnclbtn = document.createElement("button")
@@ -246,9 +246,9 @@ const domFuncs = (() => {
 
     function todoInfoCreate(e) {
         let todoinfo = document.querySelector("#todoinfo")
-        let protodonum = e.originalTarget.number
+        let todonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
-        let todo = returnTodo(protodonum)
+        let todo = returnTodo(todonum)
         let tododivs = returnTodoElements(todo)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
@@ -256,14 +256,14 @@ const domFuncs = (() => {
         let renamebtn = document.createElement("button")
         renamebtn.addEventListener("click", function(e) {
             let mainarea = document.querySelector("#content")
-            mainarea.appendChild(makeRenameForm(protodonum, pronum))
+            mainarea.appendChild(makeRenameForm(todonum, pronum))
         })
         renamebtn.textContent = "rename"
         btndiv.appendChild(renamebtn)
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
-            deleteTodo(origpronum)
+            deleteTodo(todonum)
             todoSorter()
             appendProjects()
             let projects = document.querySelector("#projectsarea").children
