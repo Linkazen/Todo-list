@@ -7,7 +7,8 @@ import {
     todoSorter, 
     saveArrs, 
     deleteProject,
-    returnProjectTodo
+    returnProjectTodoNum,
+    returnTodo
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -197,18 +198,20 @@ const domFuncs = (() => {
         return array
     }
 
-    function confirmRename(e, todonum) {
+    function confirmRename(e, todonum, pronum) {
         let newName = e.originalTarget.parentElement[0].value
+        let divNum = returnProjectTodoNum(todonum, pronum)
         renameTodo(todonum, newName)
-        todoSorter()
         appendProjects()
-        let projects = document.querySelector("#projectsarea").children
-        projects[pronum].click()
+        let projectsplace = document.querySelector("#projectsarea").children
+        projectsplace[pronum].click()
         todoinfo.innerHTML = ""
+        let todoSpace = document.querySelector("#todos").children
+        todoSpace[divNum].click()
         saveArrs()
     }
 
-    function makeRenameForm(protodonum) {
+    function makeRenameForm(todonum, pronum) {
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -224,7 +227,7 @@ const domFuncs = (() => {
         confbtn.textContent = "confirm"
         confbtn.type = "button"
         confbtn.addEventListener("click", function(e) {
-            confirmRename(e, protodonum)
+            confirmRename(e, todonum, pronum)
         })
 
         let cnclbtn = document.createElement("button")
@@ -245,15 +248,15 @@ const domFuncs = (() => {
         let todoinfo = document.querySelector("#todoinfo")
         let protodonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
-        let todo = returnProjectTodo(protodonum)
+        let todo = returnTodo(protodonum)
         let tododivs = returnTodoElements(todo)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
         
         let renamebtn = document.createElement("button")
-        renamebtn.addEventListener("click", function() {
+        renamebtn.addEventListener("click", function(e) {
             let mainarea = document.querySelector("#content")
-            mainarea.appendChild(makeRenameForm(protodonum))
+            mainarea.appendChild(makeRenameForm(protodonum, pronum))
         })
         renamebtn.textContent = "rename"
         btndiv.appendChild(renamebtn)

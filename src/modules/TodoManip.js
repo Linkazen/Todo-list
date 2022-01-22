@@ -166,7 +166,11 @@ function compileArray(value) {
     return compiledArray
 }
 
-function returnProjectTodo(todonum) {
+function returnProjectTodoNum(todonum, pronum) {
+    return myIndexOf(projects[pronum].getTodos(), todos[todonum])
+}
+
+function returnTodo(todonum) {
     return todos[todonum]
 }
 
@@ -178,5 +182,6 @@ export {
     saveArrs, 
     deleteProject,
     todoSorter,
-    returnProjectTodo
+    returnProjectTodoNum,
+    returnTodo
 }
