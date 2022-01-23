@@ -59,7 +59,6 @@ const projectCon = () => {
     let proObj = {
         title:"",
         desc:"",
-        pronum:"",
         todos:[]
     }
 

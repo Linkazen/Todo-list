@@ -7,15 +7,26 @@ let todos = []
 let projects = []
 
 // puts the 5 base projects into the project array
-let titles = [
-    "Today",
-    "7 Days",
-    "29 Days",
-    "29+ Days",
-    "Misc"
-]
-for (let i = 0; i < 5; i++) {
-    projects.push(createProject(titles[i], ""))
+function createBaseProjects() {
+    let titles = [
+        "Today",
+        "7 Days",
+        "29 Days",
+        "29+ Days",
+        "Misc"
+    ]
+    
+    let descriptions = [
+        "Todos that are due today.",
+        "Todos that are due in the next week.",
+        "todos that are due in the next month.",
+        "todos that are due later than a month",
+        "Todos that don't have a duedate"
+    ]
+    
+    for (let i = 0; i < 5; i++) {
+        projects.push(createProject(titles[i], descriptions[i]))
+    }
 }
 
 /*if (localStorage.getItem("todos") != null) {
@@ -170,9 +181,15 @@ function returnProjectTodoNum(todonum, pronum) {
     return myIndexOf(projects[pronum].getTodos(), todos[todonum])
 }
 
+function returnProject(proNum) {
+    return projects[proNum]
+}
+
 function returnTodo(todonum) {
     return todos[todonum]
 }
+
+createBaseProjects()
 
 export {
     makeTodo, 
@@ -183,5 +200,6 @@ export {
     deleteProject,
     todoSorter,
     returnProjectTodoNum,
-    returnTodo
+    returnTodo,
+    returnProject
 }

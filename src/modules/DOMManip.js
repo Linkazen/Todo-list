@@ -8,7 +8,8 @@ import {
     saveArrs, 
     deleteProject,
     returnProjectTodoNum,
-    returnTodo
+    returnTodo,
+    returnProject
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -182,18 +183,20 @@ const formfuncs = (() => {
 
 
 const domFuncs = (() => {
-    function returnTodoElements(todo) {
+    function returnInfoElements(info, proStatus) {
         let array = []
         let doc1 = document.createElement("h1")
         let doc2 = document.createElement("p")
         let doc3 = document.createElement("p")
-        doc1.textContent = `${todo.getTitle()}`
-        doc2.textContent = `${todo.getDesc()}`
-        try {
-            doc3.textContent = `${format(todo.getDatedue(), "yyyy/MM/dd HH:mm")}`
-        }
-        catch {
-            doc3.textContent = `Whenever`
+        doc1.textContent = `${info.getTitle()}`
+        doc2.textContent = `${info.getDesc()}`
+        if (proStatus === false) {
+            try {
+                doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy HH:mm")}`
+            }
+            catch {
+                doc3.textContent = `Whenever`
+            }
         }
         array.push(doc1)
         array.push(doc2)
@@ -252,7 +255,7 @@ const domFuncs = (() => {
         let todonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
         let todo = returnTodo(todonum)
-        let tododivs = returnTodoElements(todo)
+        let tododivs = returnInfoElements(todo, false)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
         
@@ -327,11 +330,22 @@ const domFuncs = (() => {
         return buttonsspan
     }
 
+    function projectInfoCreate(index) {
+        let infospace = document.querySelector("#todoinfo")
+        let project = returnProject(index)
+        let divs = returnInfoElements(project, true)
+        infospace.innerHTML = ""
+        for (let i = 0; i < divs.length; i++) {
+            infospace.appendChild(divs[i])
+        }
+    }
+
     function addListenToDivs(divs) {
         for (let i = 0; i < divs.length - 1; i++) {
             divs[i].addEventListener("click", e => {
                 let index = divs[i].number
                 makeProjectSpace(index)
+                projectInfoCreate(index)
             })
         }
     }
