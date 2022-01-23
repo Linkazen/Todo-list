@@ -29,7 +29,6 @@ const formfuncs = (() => {
             "date", 
             "date", 
             "pickdate",
-            "picktime", 
             "important"
         ]
 
@@ -39,7 +38,6 @@ const formfuncs = (() => {
             "radio",
             "radio",
             "date",
-            "time",
             "checkbox",
             "button",
             "button"
@@ -51,7 +49,6 @@ const formfuncs = (() => {
             "Whenever", 
             "Specific date", 
             "Pick a date:",
-            "Pick a time:",
             "Important?",
             "Create",
             "Close"
@@ -98,10 +95,8 @@ const formfuncs = (() => {
                     })
                     templabel.appendChild(tempinput)
                     formshell.appendChild(templabel)
-                } else if(i == 4 || i == 5) {
-                    if (i == 4) {
-                        tempinput.min = format(new Date(), "yyyy-MM-dd")
-                    }
+                } else if(i == 4) {
+                    tempinput.min = format(new Date(), "yyyy-MM-dd")
                     templabel.className = "datetime"
                     templabel.style.display = "none"
                     templabel.appendChild(tempinput)
@@ -192,7 +187,7 @@ const domFuncs = (() => {
         doc2.textContent = `${info.getDesc()}`
         if (proStatus === false) {
             try {
-                doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy HH:mm")}`
+                doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
             }
             catch {
                 doc3.textContent = `Whenever`
@@ -334,6 +329,7 @@ const domFuncs = (() => {
         let infospace = document.querySelector("#todoinfo")
         let project = returnProject(index)
         let divs = returnInfoElements(project, true)
+        console.log("hello")
         infospace.innerHTML = ""
         for (let i = 0; i < divs.length; i++) {
             infospace.appendChild(divs[i])

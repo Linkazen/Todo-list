@@ -1,4 +1,4 @@
-import { format, add, isDate, formatDistanceStrict, isThisSecond } from 'date-fns'
+import { format, add, isDate, isAfter, isThisSecond, addDays, startOfDay } from 'date-fns'
 import {todoCon, projectCon} from './Constructors'
 var _ = require('lodash')
 
@@ -9,7 +9,7 @@ let projects = []
 // puts the 5 base projects into the project array
 function createBaseProjects() {
     let titles = [
-        "Today",
+        "Tomorrow",
         "7 Days",
         "29 Days",
         "29+ Days",
@@ -17,7 +17,7 @@ function createBaseProjects() {
     ]
     
     let descriptions = [
-        "Todos that are due today.",
+        "Todos that are due Tomorrow.",
         "Todos that are due in the next week.",
         "todos that are due in the next month.",
         "todos that are due later than a month",
@@ -79,22 +79,16 @@ function todoSorter() {
     }
     for (let i = 0; i < todos.length; i++) {
         try {
-            let timeUntilDueArr = formatDistanceStrict(new Date(), todos[i].getDatedue()).split(" ")
-            switch (timeUntilDueArr[1]) {
-                case "seconds":
-                case "minutes":
-                case "hours":
-                    projects[0].addTodo(todos[i])
-                    break;
-                case "days":
-                    if (parseInt(timeUntilDueArr[0]) <= 7) {
-                        projects[1].addTodo(todos[i])
-                    } else {
-                        projects[2].addTodo(todos[i])
-                    }
-                    break;
-                default:
-                    projects[3].addTodo(todos[i])
+            let datedue = todos[i].getDatedue()
+            console.log(datedue)
+            if (isAfter(datedue, startOfDay(addDays(new Date(), 30)))) {
+                projects[3].addTodo(todos[i])
+            } else if (isAfter(datedue, startOfDay(addDays(new Date(), 7)))) {
+                projects[2].addTodo(todos[i])
+            } else if (isAfter(datedue, startOfDay(addDays(new Date(), 1)))) {
+                projects[1].addTodo(todos[i])
+            } else {
+                projects[0].addTodo(todos[i])
             }
         }
         catch {
@@ -122,10 +116,10 @@ function makeTodo(projectstatus, form) {
         todoSorter()
     } else if (projectstatus === false) {
         
-        todos.push(createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+        todos.push(createTodo(form[0].value, form[1].value, form[4].value, form[5].checked))
         todoSorter()
     } else {
-        let todo = createTodo(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked)
+        let todo = createTodo(form[0].value, form[1].value, form[4].value, form[5].checked)
         todos.push(todo)
         
         projects[projectstatus].addTodo(todos.at(-1))
@@ -164,12 +158,17 @@ function compileArray(value) {
 
     for (let i = 0; i < arr.length; i++) {
         let div = document.createElement("div")
-        div.textContent = `${arr[i].getTitle()}`
+        let title = document.createElement("p")
+        console.log(arr[i].getTitle())
+        title.textContent = `${arr[i].getTitle()}`
+        div.appendChild(title)
         if (value == "projects") {
             div.number = i
         } else {
             div.number = myIndexOf(todos, arr[i])
 
+            let date = document.createElement("p")
+            date.textContent = `${arr[i].getDatedue()}`
         }
         compiledArray.push(div)
     }

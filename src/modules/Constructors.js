@@ -22,8 +22,8 @@ const todoCon = () => {
         return todoObj.desc
     }
 
-    const setDatedue = (newDate, newTime) => {
-        todoObj.date = new Date(`${newDate}T${newTime}`)
+    const setDatedue = (newDate) => {
+        todoObj.date = new Date(`${newDate}`)
     }
 
     const getDatedue = () => {
