@@ -62,6 +62,9 @@ const formfuncs = (() => {
 
         // For loop to place the information onto the elements and append them
         for(let i = 0; i < types.length; i++) {
+            if (projectstatus === true && i < 6 && i > 1) {
+                continue
+            }
             if(i < (types.length - 2)) {
                 let tempinput = document.createElement("input")
                 let templabel = document.createElement("label")

@@ -107,7 +107,7 @@ function createProject(title, desc) {
 
 function makeTodo(projectstatus, form) {
     if(projectstatus === true) {
-        projects.push(createProject(form[0].value, form[1].value, form[4].value, form[5].value, form[6].checked))
+        projects.push(createProject(form[0].value, form[1].value))
         todoSorter()
     } else if (projectstatus === false) {
         
