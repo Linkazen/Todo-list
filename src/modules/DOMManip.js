@@ -165,7 +165,7 @@ const formfuncs = (() => {
             if (index === undefined) {
                 return
             }
-            domFuncs.makeProjectSpace(index)
+            domFuncs.appendProTodos(index)
         })
     }
     
@@ -287,7 +287,7 @@ const domFuncs = (() => {
         }
     }
 
-    function makeProjectSpace(index) {
+    function appendProTodos(index) {
         let projecttodosarea = document.querySelector("#todos")
         let compiledtodos = compileArray(index)
         projecttodosarea.currentNumber = index
@@ -344,7 +344,7 @@ const domFuncs = (() => {
         for (let i = 0; i < divs.length - 1; i++) {
             divs[i].addEventListener("click", e => {
                 let index = divs[i].number
-                makeProjectSpace(index)
+                appendProTodos(index)
                 projectInfoCreate(index)
             })
         }
@@ -366,7 +366,7 @@ const domFuncs = (() => {
         }
     }
 
-    return { appendProjects, makeProjectSpace }
+    return {appendProjects, appendProTodos}
 
 })()
 

@@ -27,7 +27,7 @@ html, body {
     display: flex;
     grid-area: topbar;
     border-bottom: 3px solid black;
-    background-image: linear-gradient(to bottom, red, rgb(148, 0, 0));
+    background-image: linear-gradient(to top, rgb(41, 71, 77), rgb(44, 44, 44));
 }
 
 #projectsarea {
@@ -60,14 +60,14 @@ html, body {
 
 #projecttodosarea {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1;
     grid-template-areas: 
-        "todos todoinfo todoinfo todoinfo todoinfo todoinfo"
+        "todos todoinfo todoinfo"
     ;
     grid-area: main;
-    background-color: khaki;
-    background-image: linear-gradient(to top, khaki, rgb(240, 225, 88))
+    background-color: rgb(185, 185, 185);
+    background-image: linear-gradient(to bottom, rgb(185, 185, 185), rgb(218, 216, 216));
 }
 
 #todos {
