@@ -78,21 +78,18 @@ function todoSorter() {
         projects[i].emptyTodos()
     }
     for (let i = 0; i < todos.length; i++) {
-        try {
-            let datedue = todos[i].getDatedue()
-            console.log(datedue)
-            if (isAfter(datedue, startOfDay(addDays(new Date(), 30)))) {
-                projects[3].addTodo(todos[i])
-            } else if (isAfter(datedue, startOfDay(addDays(new Date(), 7)))) {
-                projects[2].addTodo(todos[i])
-            } else if (isAfter(datedue, startOfDay(addDays(new Date(), 1)))) {
-                projects[1].addTodo(todos[i])
-            } else {
-                projects[0].addTodo(todos[i])
-            }
-        }
-        catch {
+        let datedue = todos[i].getDatedue()
+        console.log(datedue.toString())
+        if (datedue.toString() === "Invalid Date") {
             projects[4].addTodo(todos[i])
+        } else if (isAfter(datedue, startOfDay(addDays(new Date(), 30)))) {
+            projects[3].addTodo(todos[i])
+        } else if (isAfter(datedue, startOfDay(addDays(new Date(), 7)))) {
+            projects[2].addTodo(todos[i])
+        } else if (isAfter(datedue, startOfDay(addDays(new Date(), 1)))) {
+            projects[1].addTodo(todos[i])
+        } else {
+            projects[0].addTodo(todos[i])
         }
     }
     saveArrs()
@@ -159,7 +156,6 @@ function compileArray(value) {
     for (let i = 0; i < arr.length; i++) {
         let div = document.createElement("div")
         let title = document.createElement("p")
-        console.log(arr[i].getTitle())
         title.textContent = `${arr[i].getTitle()}`
         div.appendChild(title)
         if (value == "projects") {

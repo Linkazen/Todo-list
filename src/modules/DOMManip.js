@@ -329,7 +329,6 @@ const domFuncs = (() => {
         let infospace = document.querySelector("#todoinfo")
         let project = returnProject(index)
         let divs = returnInfoElements(project, true)
-        console.log("hello")
         infospace.innerHTML = ""
         for (let i = 0; i < divs.length; i++) {
             infospace.appendChild(divs[i])
