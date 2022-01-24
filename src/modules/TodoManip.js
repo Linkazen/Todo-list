@@ -31,30 +31,34 @@ function createBaseProjects() {
     }
 }
 
-/*if (localStorage.getItem("todos") != null) {
+if (localStorage.getItem("todos") != null) {
     todos = JSON.parse(localStorage.getItem("todos"))
-    todos.forEach(element => storeDateObjConv(element, false))
+    for (let i = 0; i < todos.length; i++) {
+        let objinfo = todos[i].todoObj
+        let newTodo = todoCon()
+        newTodo.quickMake(objinfo.title, objinfo.desc, objinfo.date, objinfo.priority)
+        todos[i] = newTodo
+    }
 }
 
 if (localStorage.getItem("projects") != null) {
     projects = JSON.parse(localStorage.getItem("projects"))
+    for (let i = 0; i < projects.length; i++) {
+        let objinfo = projects[i].proObj
+        let newProj = projectCon()
+        newProj.quickMake(objinfo.title, objinfo.desc)
+        projects[i] = newProj
+    }
+    todoSorter()
 }
 
-btn for clearing out local storage for testing purposes
+/* // btn for clearing out local storage for testing purposes
 let localprobtn = document.createElement("button")
 localprobtn.innerText = "clear local storage"
 localprobtn.addEventListener("click", function() {
     localStorage.clear()
 })
-document.querySelector('#topdiv').appendChild(localprobtn)
-
-// converts the local storage dates from strings to date objects
-function storeDateObjConv(obj, proTrue) {
-    let datedue = obj.getDatedue()
-    if (datedue != undefined || datedue != "whenever") {
-        obj.setDatedue(new Date(Date.parse(obj.datedue)))
-    }
-}*/
+document.querySelector('#topdiv').appendChild(localprobtn) */
 
 function renameTodo(todonum, name) {
     todos[todonum].setTitle(name)
@@ -206,7 +210,9 @@ function returnTodo(todonum) {
     return todos[todonum]
 }
 
-createBaseProjects()
+if (projects.length < 1) {
+    createBaseProjects()
+}
 
 export {
     makeTodo, 

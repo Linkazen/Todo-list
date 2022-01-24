@@ -25,9 +25,25 @@ html, body {
 
 #topdiv {
     display: flex;
+    align-items: center;
     grid-area: topbar;
     border-bottom: 3px solid black;
     background-image: linear-gradient(to top, rgb(41, 71, 77), rgb(44, 44, 44));
+    padding: 0 10px 0 10px;
+}
+
+#topdiv > button {
+    width: 100px;
+    height: 50px;
+}
+
+#topdiv > button:first-of-type {
+    margin-left: auto;
+}
+
+#topdiv > h2 {
+    color: yellow;
+    text-shadow: 2px 2px 0px #fff56b;
 }
 
 #projectsarea {
