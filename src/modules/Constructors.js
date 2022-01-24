@@ -38,10 +38,10 @@ const todoCon = () => {
         return todoObj.priority
     }
 
-    const quickMake = (title, desc, date, time, priority) => {
+    const quickMake = (title, desc, date, priority) => {
         setTitle(title)
         setDesc(desc)
-        setDatedue(date, time)
+        setDatedue(date)
         setPriority(priority)
     }
 

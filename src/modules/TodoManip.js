@@ -58,6 +58,10 @@ function renameTodo(todonum, name) {
     todos[todonum].setTitle(name)
 }
 
+function changeDate(todonum, newDate) {
+    todos[todonum].setDatedue(newDate)
+}
+
 function deleteTodo(todonum) {
     todos.splice(todonum, 1)
 }
@@ -158,14 +162,23 @@ function compileArray(value) {
         title.textContent = `${arr[i].getTitle()}`
         title.style.pointerEvents = "none"
         div.appendChild(title)
+        
         if (value == "projects") {
             div.number = i
         } else {
             div.number = myIndexOf(todos, arr[i])
-
+            if (arr[i].getPriority() == true) {
+                div.style.order = "-1"
+            }
             let date = document.createElement("p")
-            date.textContent = `${arr[i].getDatedue()}`
+            try {
+                date.textContent = `${format(arr[i].getDatedue(), "dd/MM/yyyy")}`
+            }
+            catch {
+                date.textContent = `No Date Entered`
+            }
             date.style.pointerEvents = "none"
+            div.appendChild(date)
         }
         compiledArray.push(div)
     }
@@ -197,5 +210,6 @@ export {
     todoSorter,
     returnProjectTodoNum,
     returnTodo,
-    returnProject
+    returnProject,
+    changeDate
 }

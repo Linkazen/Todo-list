@@ -9,7 +9,8 @@ import {
     deleteProject,
     returnProjectTodoNum,
     returnTodo,
-    returnProject
+    returnProject,
+    changeDate
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -178,19 +179,76 @@ const formfuncs = (() => {
 
 
 const domFuncs = (() => {
-    function returnInfoElements(info, proStatus) {
+    function confirmDateChange(e, todonum, pronum) {
+        let newDate = e.originalTarget.parentElement[0].value
+        let divNum = returnProjectTodoNum(todonum, pronum)
+        console.log(divNum)
+        changeDate(divNum, newDate)
+        appendProjects()
+        let projectsplace = document.querySelector("#projectsarea").children
+        projectsplace[pronum].click()
+        let todoSpace = document.querySelector("#todos").children
+        todoSpace[divNum].click()
+        saveArrs()
+    }
+
+    function makeDateForm(todonum, pronum) {
+        let form = document.createElement("form")
+        form.id = "renameform"
+
+        let label = document.createElement("label")
+        label.textContent = "New Date"
+        label.for = "newdate"
+
+        let text = document.createElement("input")
+        text.type = "date"
+        text.name = "newdate"
+        
+        let confbtn = document.createElement("button")
+        confbtn.textContent = "confirm"
+        confbtn.type = "button"
+        confbtn.addEventListener("click", function(e) {
+            confirmDateChange(e, todonum, pronum)
+            destroyForm(e)
+            todoSorter()
+            appendProjects()
+            appendProTodos(pronum)
+        })
+
+        let cnclbtn = document.createElement("button")
+        cnclbtn.textContent = "cancel"
+        cnclbtn.type = "button"
+        cnclbtn.addEventListener("click", function(e) {
+            destroyForm(e)
+        })
+        
+        label.appendChild(text)
+        form.appendChild(label)
+        form.appendChild(confbtn)
+        form.appendChild(cnclbtn)
+        return form
+    }
+
+    function returnInfoElements(info, proStatus, todonum, pronum) {
         let array = []
         let doc1 = document.createElement("h1")
         let doc2 = document.createElement("p")
-        let doc3 = document.createElement("p")
+        let doc3 = document.createElement("div")
+        let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
         if (proStatus === false) {
             try {
                 doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
+                doc3.addEventListener("click", function(e) {
+                    mainarea.appendChild(makeDateForm(todonum, pronum))
+                })
             }
             catch {
-                doc3.textContent = `Whenever`
+                doc3.textContent = `No Date Entered`
+                doc3.addEventListener("click", function(e) {
+                    mainarea.appendChild(makeDateForm(todonum, pronum))
+                })
             }
         }
         array.push(doc1)
@@ -250,8 +308,7 @@ const domFuncs = (() => {
         let todonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
         let todo = returnTodo(todonum)
-        console.log("hello")
-        let tododivs = returnInfoElements(todo, false)
+        let tododivs = returnInfoElements(todo, false, todonum, pronum)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
         
