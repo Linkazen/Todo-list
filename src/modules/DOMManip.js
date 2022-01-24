@@ -443,6 +443,9 @@ const domFuncs = (() => {
         projecttodosarea.innerHTML = ""
         if (index > 5) {
             projecttodosarea.appendChild(addBtnsToProject(index))
+        } else {
+            let cssDiv = document.createElement("span")
+            projecttodosarea.appendChild(cssDiv)
         }
         for (let i = 0; i < compiledtodos.length; i++) {
             compiledtodos[i].addEventListener("click", e => {

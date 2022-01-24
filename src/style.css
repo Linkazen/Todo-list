@@ -104,8 +104,9 @@ html, body {
     background-color: rgb(71, 71, 71);
 }
 
-#todos > *:last-child {
+#todos > *:first-child {
     margin-bottom: auto;
+    order: 1;
 }
 
 #todos > span:only-child {
@@ -115,7 +116,6 @@ html, body {
 .probtns {
     display: flex;
     justify-content: space-evenly;
-    order: 1;
     padding: 30px 0 30px 0;
 }
 
