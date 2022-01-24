@@ -250,6 +250,7 @@ const domFuncs = (() => {
         let todonum = e.originalTarget.number
         let pronum = e.originalTarget.parentElement.currentNumber
         let todo = returnTodo(todonum)
+        console.log("hello")
         let tododivs = returnInfoElements(todo, false)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"

@@ -79,7 +79,6 @@ function todoSorter() {
     }
     for (let i = 0; i < todos.length; i++) {
         let datedue = todos[i].getDatedue()
-        console.log(datedue.toString())
         if (datedue.toString() === "Invalid Date") {
             projects[4].addTodo(todos[i])
         } else if (isAfter(datedue, startOfDay(addDays(new Date(), 30)))) {
@@ -157,6 +156,7 @@ function compileArray(value) {
         let div = document.createElement("div")
         let title = document.createElement("p")
         title.textContent = `${arr[i].getTitle()}`
+        title.style.pointerEvents = "none"
         div.appendChild(title)
         if (value == "projects") {
             div.number = i
@@ -165,6 +165,7 @@ function compileArray(value) {
 
             let date = document.createElement("p")
             date.textContent = `${arr[i].getDatedue()}`
+            date.style.pointerEvents = "none"
         }
         compiledArray.push(div)
     }
