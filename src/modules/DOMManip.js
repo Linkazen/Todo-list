@@ -199,6 +199,13 @@ const domFuncs = (() => {
     }
 
     function makeDateForm(todonum, pronum) {
+        try {
+            let previousForm = document.querySelector("#renameform")
+            previousForm.innerHTML = ""
+        }
+        catch {
+            
+        }
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -297,18 +304,30 @@ const domFuncs = (() => {
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
         doc2.addEventListener("click", function (e) {
+            let previousForm = document.querySelector("#renameform")
+            if (previousForm != null) {
+                previousForm.remove()
+            }
             mainarea.appendChild(makeDescForm(todonum, pronum))
         })
         if (proStatus === false) {
             try {
                 doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
                 doc3.addEventListener("click", function(e) {
+                    let previousForm = document.querySelector("#renameform")
+                    if (previousForm != null) {
+                        previousForm.remove()
+                    }
                     mainarea.appendChild(makeDateForm(todonum, pronum))
                 })
             }
             catch {
                 doc3.textContent = `No Date Entered`
                 doc3.addEventListener("click", function(e) {
+                    let previousForm = document.querySelector("#renameform")
+                    if (previousForm != null) {
+                        previousForm.remove()
+                    }
                     mainarea.appendChild(makeDateForm(todonum, pronum))
                 })
             }
@@ -336,6 +355,13 @@ const domFuncs = (() => {
     }
 
     function makeRenameForm(todonum, pronum) {
+        try {
+            let previousForm = document.querySelector("#renameform")
+            previousForm.innerHTML = ""
+        }
+        catch {
+            
+        }
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -380,6 +406,10 @@ const domFuncs = (() => {
         
         let renamebtn = document.createElement("button")
         renamebtn.addEventListener("click", function(e) {
+            let previousForm = document.querySelector("#renameform")
+            if (previousForm != null) {
+                previousForm.remove()
+            }
             let mainarea = document.querySelector("#content")
             mainarea.appendChild(makeRenameForm(todonum, pronum))
         })
