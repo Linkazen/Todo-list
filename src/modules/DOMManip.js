@@ -182,13 +182,16 @@ const domFuncs = (() => {
     function confirmDateChange(e, todonum, pronum) {
         let newDate = e.originalTarget.parentElement[0].value
         let divNum = returnProjectTodoNum(todonum, pronum)
-        console.log(divNum)
-        changeDate(divNum, newDate)
+        changeDate(todonum, newDate)
         appendProjects()
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
-        let todoSpace = document.querySelector("#todos").children
-        todoSpace[divNum].click()
+        let todoSpace = document.querySelector("#todos").children 
+        if (pronum > 4) {
+            todoSpace[divNum + 1].click()
+        } else {
+            todoSpace[divNum].click()
+        }
         saveArrs()
     }
 
@@ -265,7 +268,11 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children
-        todoSpace[divNum].click()
+        if (pronum > 4) {
+            todoSpace[divNum + 1].click()
+        } else {
+            todoSpace[divNum].click()
+        }
         saveArrs()
     }
 
