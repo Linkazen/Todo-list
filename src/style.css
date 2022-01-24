@@ -35,13 +35,18 @@ html, body {
 #topdiv > button {
     width: 100px;
     height: 50px;
+    margin: 0 10px 0 10px;
+    background-color: yellowgreen;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
-#topdiv > button:first-of-type {
-    margin-left: auto;
+#topdiv > button:active {
+    background-color: rgb(83, 131, 12);
 }
 
 #topdiv > h2 {
+    margin-right: auto;
     color: yellow;
     text-shadow: 2px 2px 0px #fff56b;
 }

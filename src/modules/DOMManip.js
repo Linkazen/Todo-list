@@ -303,14 +303,14 @@ const domFuncs = (() => {
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
-        doc2.addEventListener("click", function (e) {
-            let previousForm = document.querySelector("#renameform")
-            if (previousForm != null) {
-                previousForm.remove()
-            }
-            mainarea.appendChild(makeDescForm(todonum, pronum))
-        })
         if (proStatus === false) {
+            doc2.addEventListener("click", function (e) {
+                let previousForm = document.querySelector("#renameform")
+                if (previousForm != null) {
+                    previousForm.remove()
+                }
+                mainarea.appendChild(makeDescForm(todonum, pronum))
+            })
             try {
                 doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
                 doc3.addEventListener("click", function(e) {
