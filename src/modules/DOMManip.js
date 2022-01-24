@@ -10,7 +10,8 @@ import {
     returnProjectTodoNum,
     returnTodo,
     returnProject,
-    changeDate
+    changeDate,
+    changeDesc
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -115,6 +116,8 @@ const formfuncs = (() => {
             }
         }
 
+        formshell.onkeydown="return event.key != 'Enter';"
+
         return formshell
     }
 
@@ -187,7 +190,7 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children 
-        if (pronum > 4) {
+        if (pronum > 5) {
             todoSpace[divNum + 1].click()
         } else {
             todoSpace[divNum].click()
@@ -232,14 +235,70 @@ const domFuncs = (() => {
         return form
     }
 
+    function confirmDescChange(e, todonum, pronum) {
+        let newDate = e.originalTarget.parentElement[0].value
+        let divNum = returnProjectTodoNum(todonum, pronum)
+        changeDesc(todonum, newDate)
+        appendProjects()
+        let projectsplace = document.querySelector("#projectsarea").children
+        projectsplace[pronum].click()
+        let todoSpace = document.querySelector("#todos").children 
+        if (pronum > 5) {
+            todoSpace[divNum + 1].click()
+        } else {
+            todoSpace[divNum].click()
+        }
+        saveArrs()
+    }
+
+    function makeDescForm(todonum, pronum) {
+        let form = document.createElement("form")
+        form.id = "renameform"
+
+        let label = document.createElement("label")
+        label.textContent = "New Desc"
+        label.for = "newdesc"
+
+        let text = document.createElement("input")
+        text.type = "text"
+        text.name = "newdesc"
+        
+        let confbtn = document.createElement("button")
+        confbtn.textContent = "confirm"
+        confbtn.type = "button"
+        confbtn.addEventListener("click", function(e) {
+            confirmDescChange(e, todonum, pronum)
+            destroyForm(e)
+            todoSorter()
+            appendProjects()
+            appendProTodos(pronum)
+        })
+
+        let cnclbtn = document.createElement("button")
+        cnclbtn.textContent = "cancel"
+        cnclbtn.type = "button"
+        cnclbtn.addEventListener("click", function(e) {
+            destroyForm(e)
+        })
+        
+        label.appendChild(text)
+        form.appendChild(label)
+        form.appendChild(confbtn)
+        form.appendChild(cnclbtn)
+        return form
+    }
+
     function returnInfoElements(info, proStatus, todonum, pronum) {
         let array = []
         let doc1 = document.createElement("h1")
-        let doc2 = document.createElement("p")
+        let doc2 = document.createElement("div")
         let doc3 = document.createElement("div")
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
+        doc2.addEventListener("click", function (e) {
+            mainarea.appendChild(makeDescForm(todonum, pronum))
+        })
         if (proStatus === false) {
             try {
                 doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
@@ -268,7 +327,7 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children
-        if (pronum > 4) {
+        if (pronum > 5) {
             todoSpace[divNum + 1].click()
         } else {
             todoSpace[divNum].click()
@@ -352,7 +411,7 @@ const domFuncs = (() => {
         let compiledtodos = compileArray(index)
         projecttodosarea.currentNumber = index
         projecttodosarea.innerHTML = ""
-        if (index > 4) {
+        if (index > 5) {
             projecttodosarea.appendChild(addBtnsToProject(index))
         }
         for (let i = 0; i < compiledtodos.length; i++) {
@@ -419,7 +478,7 @@ const domFuncs = (() => {
         projectsarea.innerHTML = ""
         addListenToDivs(projectarr)
         for (let i = 0; i < projectarr.length; i++) {
-            if (i > 4 && projectarr[i] != projectarr.at(-1)) {
+            if (i > 5 && projectarr[i] != projectarr.at(-1)) {
                 projectarr[i].style.order = "2"
             }
             projectsarea.appendChild(projectarr[i])

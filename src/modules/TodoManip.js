@@ -9,6 +9,7 @@ let projects = []
 // puts the 5 base projects into the project array
 function createBaseProjects() {
     let titles = [
+        "Past Deadline",
         "Tomorrow",
         "7 Days",
         "29 Days",
@@ -17,14 +18,15 @@ function createBaseProjects() {
     ]
     
     let descriptions = [
+        "Todos that are now past their deadline.",
         "Todos that are due Tomorrow.",
         "Todos that are due in the next week.",
-        "todos that are due in the next month.",
-        "todos that are due later than a month",
-        "Todos that don't have a duedate"
+        "Todos that are due in the next month.",
+        "Todos that are due later than a month.",
+        "Todos that don't have a duedate."
     ]
     
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < titles.length; i++) {
         projects.push(createProject(titles[i], descriptions[i]))
     }
 }
@@ -62,6 +64,10 @@ function changeDate(todonum, newDate) {
     todos[todonum].setDatedue(newDate)
 }
 
+function changeDesc(todonum, newDesc) {
+    todos[todonum].setDesc(newDesc)
+}
+
 function deleteTodo(todonum) {
     todos.splice(todonum, 1)
 }
@@ -78,18 +84,20 @@ function deleteProject(pronum) {
 
 // goes through the todos in the array and sorts them to where they should be
 function todoSorter() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
         projects[i].emptyTodos()
     }
     for (let i = 0; i < todos.length; i++) {
         let datedue = todos[i].getDatedue()
         if (datedue.toString() === "Invalid Date") {
-            projects[4].addTodo(todos[i])
+            projects[5].addTodo(todos[i])
         } else if (isAfter(datedue, startOfDay(addDays(new Date(), 30)))) {
-            projects[3].addTodo(todos[i])
+            projects[4].addTodo(todos[i])
         } else if (isAfter(datedue, startOfDay(addDays(new Date(), 7)))) {
-            projects[2].addTodo(todos[i])
+            projects[3].addTodo(todos[i])
         } else if (isAfter(datedue, startOfDay(addDays(new Date(), 1)))) {
+            projects[2].addTodo(todos[i])
+        } else if (isAfter(datedue, startOfDay(new Date()))) {
             projects[1].addTodo(todos[i])
         } else {
             projects[0].addTodo(todos[i])
@@ -211,5 +219,6 @@ export {
     returnProjectTodoNum,
     returnTodo,
     returnProject,
-    changeDate
+    changeDate,
+    changeDesc
 }

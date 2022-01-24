@@ -115,8 +115,8 @@ html, body {
     height: 5em;
 }
 
-#todoinfo > p:first-of-type {
-    margin: 0 20px auto 20px;
+#todoinfo > div:first-of-type {
+    height: 100%;
 }
 
 #renameform {
