@@ -110,7 +110,7 @@ html, body {
 }
 
 #todos > *:first-child {
-    margin-bottom: auto;
+    margin-top: auto;
     order: 1;
 }
 

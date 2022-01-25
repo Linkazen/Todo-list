@@ -68,8 +68,12 @@ function changeDate(todonum, newDate) {
     todos[todonum].setDatedue(newDate)
 }
 
-function changeDesc(todonum, newDesc) {
+function changeTodoDesc(todonum, newDesc) {
     todos[todonum].setDesc(newDesc)
+}
+
+function changeProDesc(pronum, newDesc) {
+    projects[pronum].setDesc(newDesc)
 }
 
 function deleteTodo(todonum) {
@@ -226,5 +230,6 @@ export {
     returnTodo,
     returnProject,
     changeDate,
-    changeDesc
+    changeTodoDesc,
+    changeProDesc
 }

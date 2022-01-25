@@ -11,7 +11,8 @@ import {
     returnTodo,
     returnProject,
     changeDate,
-    changeDesc
+    changeTodoDesc,
+    changeProDesc
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -242,10 +243,14 @@ const domFuncs = (() => {
         return form
     }
 
-    function confirmDescChange(e, todonum, pronum) {
-        let newDate = e.originalTarget.parentElement[0].value
+    function confirmDescChange(e, todonum, pronum, prostatus) {
+        let newDesc = e.originalTarget.parentElement[0].value
         let divNum = returnProjectTodoNum(todonum, pronum)
-        changeDesc(todonum, newDate)
+        if (prostatus) {
+            changeProDesc(pronum, newDesc)
+        } else {
+            changeTodoDesc(todonum, newDesc)
+        }
         appendProjects()
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
@@ -258,7 +263,7 @@ const domFuncs = (() => {
         saveArrs()
     }
 
-    function makeDescForm(todonum, pronum) {
+    function makeDescForm(todonum, pronum, prostatus) {
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -274,7 +279,7 @@ const domFuncs = (() => {
         confbtn.textContent = "confirm"
         confbtn.type = "button"
         confbtn.addEventListener("click", function(e) {
-            confirmDescChange(e, todonum, pronum)
+            confirmDescChange(e, todonum, pronum, prostatus)
             destroyForm(e)
             todoSorter()
             appendProjects()
@@ -303,14 +308,16 @@ const domFuncs = (() => {
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
-        if (proStatus === false) {
+        if (pronum > 5) {
             doc2.addEventListener("click", function (e) {
                 let previousForm = document.querySelector("#renameform")
                 if (previousForm != null) {
                     previousForm.remove()
                 }
-                mainarea.appendChild(makeDescForm(todonum, pronum))
+                mainarea.appendChild(makeDescForm(todonum, pronum, proStatus))
             })
+        }
+        if (proStatus === false) {
             try {
                 doc3.textContent = `${format(info.getDatedue(), "dd/MM/yyyy")}`
                 doc3.addEventListener("click", function(e) {
@@ -405,7 +412,7 @@ const domFuncs = (() => {
         btndiv.className = "probtns"
         
         let renamebtn = document.createElement("button")
-        renamebtn.addEventListener("click", function(e) {
+        renamebtn.addEventListener("click", function() {
             let previousForm = document.querySelector("#renameform")
             if (previousForm != null) {
                 previousForm.remove()
@@ -485,7 +492,7 @@ const domFuncs = (() => {
     function projectInfoCreate(index) {
         let infospace = document.querySelector("#todoinfo")
         let project = returnProject(index)
-        let divs = returnInfoElements(project, true)
+        let divs = returnInfoElements(project, true, null, index)
         infospace.innerHTML = ""
         for (let i = 0; i < divs.length; i++) {
             infospace.appendChild(divs[i])
