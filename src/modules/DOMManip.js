@@ -191,11 +191,7 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children 
-        if (pronum > 5) {
-            todoSpace[divNum + 1].click()
-        } else {
-            todoSpace[divNum].click()
-        }
+        todoSpace[divNum + 1].click()
         saveArrs()
     }
 
@@ -255,11 +251,7 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children 
-        if (pronum > 5) {
-            todoSpace[divNum + 1].click()
-        } else {
-            todoSpace[divNum].click()
-        }
+        todoSpace[divNum + 1].click()
         saveArrs()
     }
 
@@ -308,7 +300,8 @@ const domFuncs = (() => {
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
-        if (pronum > 5) {
+        if (pronum > 5 || todonum != null) {
+            
             doc2.addEventListener("click", function (e) {
                 let previousForm = document.querySelector("#renameform")
                 if (previousForm != null) {
@@ -353,11 +346,8 @@ const domFuncs = (() => {
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children
-        if (pronum > 5) {
-            todoSpace[divNum + 1].click()
-        } else {
-            todoSpace[divNum].click()
-        }
+        console.log(todoSpace && divNum)
+        todoSpace[divNum + 1].click()
         saveArrs()
     }
 
