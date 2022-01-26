@@ -136,6 +136,14 @@ html, body {
     height: 5em;
 }
 
+#todoinfo > h1:hover {
+    background-color: grey;
+}
+
+#todoinfo > div:hover:not(:last-child) {
+    background-color: grey;
+}
+
 #todoinfo > div:first-of-type {
     height: 100%;
 }
