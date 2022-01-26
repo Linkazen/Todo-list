@@ -12,7 +12,8 @@ import {
     returnProject,
     changeDate,
     changeTodoDesc,
-    changeProDesc
+    changeProDesc,
+    renameProTitle
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -300,8 +301,14 @@ const domFuncs = (() => {
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
-        if (pronum > 5 || todonum != null) {
-            
+        if (pronum > 5 || proStatus === false) {
+            doc1.addEventListener("click", function (e) {
+                let previousForm = document.querySelector("#renameform")
+                if (previousForm != null) {
+                    previousForm.remove()
+                }
+                mainarea.appendChild(makeRenameForm(todonum, pronum, proStatus))
+            })
             doc2.addEventListener("click", function (e) {
                 let previousForm = document.querySelector("#renameform")
                 if (previousForm != null) {
@@ -338,27 +345,28 @@ const domFuncs = (() => {
         return array
     }
 
-    function confirmRename(e, todonum, pronum) {
+    function confirmRename(e, todonum, pronum, prostatus) {
         let newName = e.originalTarget.parentElement[0].value
         let divNum = returnProjectTodoNum(todonum, pronum)
-        renameTodo(todonum, newName)
+        if (prostatus) {
+            renameProTitle(todonum, newName)
+        } else {
+            renameTodo(todonum, newName)
+        }
         appendProjects()
         let projectsplace = document.querySelector("#projectsarea").children
         projectsplace[pronum].click()
         let todoSpace = document.querySelector("#todos").children
-        console.log(todoSpace && divNum)
         todoSpace[divNum + 1].click()
         saveArrs()
     }
 
-    function makeRenameForm(todonum, pronum) {
-        try {
-            let previousForm = document.querySelector("#renameform")
+    function makeRenameForm(todonum, pronum, prostatus) {
+        let previousForm = document.querySelector("#renameform")
+        if(previousForm != undefined) {
             previousForm.innerHTML = ""
         }
-        catch {
-            
-        }
+
         let form = document.createElement("form")
         form.id = "renameform"
 
@@ -374,7 +382,7 @@ const domFuncs = (() => {
         confbtn.textContent = "confirm"
         confbtn.type = "button"
         confbtn.addEventListener("click", function(e) {
-            confirmRename(e, todonum, pronum)
+            confirmRename(e, todonum, pronum, prostatus)
             destroyForm(e)
         })
 
@@ -400,18 +408,6 @@ const domFuncs = (() => {
         let tododivs = returnInfoElements(todo, false, todonum, pronum)
         let btndiv = document.createElement("div")
         btndiv.className = "probtns"
-        
-        let renamebtn = document.createElement("button")
-        renamebtn.addEventListener("click", function() {
-            let previousForm = document.querySelector("#renameform")
-            if (previousForm != null) {
-                previousForm.remove()
-            }
-            let mainarea = document.querySelector("#content")
-            mainarea.appendChild(makeRenameForm(todonum, pronum))
-        })
-        renamebtn.textContent = "rename"
-        btndiv.appendChild(renamebtn)
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
@@ -479,10 +475,11 @@ const domFuncs = (() => {
         return buttonsspan
     }
 
-    function projectInfoCreate(index) {
+    function projectInfoCreate(e, index) {
         let infospace = document.querySelector("#todoinfo")
         let project = returnProject(index)
-        let divs = returnInfoElements(project, true, null, index)
+        let num = e.originalTarget.number
+        let divs = returnInfoElements(project, true, num, index)
         infospace.innerHTML = ""
         for (let i = 0; i < divs.length; i++) {
             infospace.appendChild(divs[i])
@@ -494,7 +491,7 @@ const domFuncs = (() => {
             divs[i].addEventListener("click", e => {
                 let index = divs[i].number
                 appendProTodos(index)
-                projectInfoCreate(index)
+                projectInfoCreate(e, index)
             })
         }
     }

@@ -72,6 +72,10 @@ function changeTodoDesc(todonum, newDesc) {
     todos[todonum].setDesc(newDesc)
 }
 
+function renameProTitle(pronum, newTitle) {
+    projects[pronum].setTitle(newTitle)
+}
+
 function changeProDesc(pronum, newDesc) {
     projects[pronum].setDesc(newDesc)
 }
@@ -231,5 +235,6 @@ export {
     returnProject,
     changeDate,
     changeTodoDesc,
-    changeProDesc
+    changeProDesc,
+    renameProTitle
 }
