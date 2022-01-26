@@ -80,8 +80,12 @@ function changeProDesc(pronum, newDesc) {
     projects[pronum].setDesc(newDesc)
 }
 
-function deleteTodo(todonum) {
+function deleteTodo(todonum, pronum) {
+    let protodoarr = projects[pronum].getTodos()
+    protodoarr.splice(myIndexOf(protodoarr, todos[todonum]))
+
     todos.splice(todonum, 1)
+
 }
 
 function deleteProject(pronum) {
@@ -135,7 +139,6 @@ function makeTodo(projectstatus, form) {
         projects.push(createProject(form[0].value, form[1].value))
         todoSorter()
     } else if (projectstatus === false) {
-        
         todos.push(createTodo(form[0].value, form[1].value, form[4].value, form[5].checked))
         todoSorter()
     } else {

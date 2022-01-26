@@ -411,7 +411,7 @@ const domFuncs = (() => {
 
         let deletebtn = document.createElement("button")
         deletebtn.addEventListener("click", function() {
-            deleteTodo(todonum)
+            deleteTodo(todonum, pronum)
             todoSorter()
             appendProjects()
             let projects = document.querySelector("#projectsarea").children
