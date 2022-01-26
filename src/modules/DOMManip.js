@@ -13,7 +13,8 @@ import {
     changeDate,
     changeTodoDesc,
     changeProDesc,
-    renameProTitle
+    renameProTitle,
+    changePriority
 } from './TodoManip'
 import {todoCon, projectCon} from './Constructors'
 
@@ -293,11 +294,28 @@ const domFuncs = (() => {
         return form
     }
 
+    function priorityChange(e, todonum, pronum) {
+        let divNum = returnProjectTodoNum(todonum, pronum)
+        if (e.originalTarget.checked === true) {
+            changePriority(todonum, true)
+        } else {
+            changePriority(todonum, false)
+        }
+        appendProjects()
+        let projectsplace = document.querySelector("#projectsarea").children
+        projectsplace[pronum].click()
+        let todoSpace = document.querySelector("#todos").children 
+        todoSpace[divNum + 1].click()
+        saveArrs()
+    }
+
     function returnInfoElements(info, proStatus, todonum, pronum) {
         let array = []
         let doc1 = document.createElement("h1")
         let doc2 = document.createElement("div")
         let doc3 = document.createElement("div")
+        let doc4 = document.createElement("label")
+        let doc4box = document.createElement("input")
         let mainarea = document.querySelector("#content")
         doc1.textContent = `${info.getTitle()}`
         doc2.textContent = `${info.getDesc()}`
@@ -338,10 +356,26 @@ const domFuncs = (() => {
                     mainarea.appendChild(makeDateForm(todonum, pronum))
                 })
             }
+
+            doc4.for = "important"
+            doc4.innerText = "Important?"
+            doc4box.type = "checkbox"
+            doc4box.name = "important"
+            if (info.getPriority() === true) {
+                doc4box.checked = true
+            }
+
+            doc4box.addEventListener("change", e => {
+                priorityChange(e, todonum, pronum)
+            })
+
+            doc4.appendChild(doc4box)
+
         }
         array.push(doc1)
         array.push(doc2)
         array.push(doc3)
+        array.push(doc4)
         return array
     }
 
